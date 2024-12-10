@@ -7,9 +7,10 @@ import { GrammarModule } from './grammar/grammar.module';
 import { ExampleService } from './example/example.service';
 import { ExampleController } from './example/example.controller';
 import { ExampleModule } from './example/example.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UserModule, GrammarModule, ExampleModule],
+  imports: [UserModule, GrammarModule, ExampleModule, AuthModule],
   controllers: [AppController, ExampleController],
   providers: [AppService, PrismaService, ExampleService],
 })
