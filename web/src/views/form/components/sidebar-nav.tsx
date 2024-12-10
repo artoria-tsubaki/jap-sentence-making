@@ -29,7 +29,7 @@ export function SidebarNav({ className, activeId, onNavClick, items, ...props }:
           className={cn(
             buttonVariants({ variant: "ghost" }),
             activeId === item.id
-              ? "bg-muted hover:bg-muted"
+              ? "bg-neutral-300 hover:bg-neutral-300"
               : "hover:bg-transparent hover:underline",
             "justify-start"
           )}
