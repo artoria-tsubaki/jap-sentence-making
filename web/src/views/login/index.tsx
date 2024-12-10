@@ -17,9 +17,6 @@ const login = () => {
 
   const onLogIn = () => {
     // TODO: Implement login
-    ExampleApi({ user_id : 1 }).then((res) => {
-      console.log(res);
-    })
   }
   const onSignUp = () => {
     // TODO: Implement signup
