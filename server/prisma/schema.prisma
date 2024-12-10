@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int     @id @default(autoincrement())
+  username    String  @unique @db.VarChar(20)
+  password    String  @db.VarChar(255)
+  email       String  @unique @db.VarChar(30)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+}
+
+model Example {
+  id                  Int @id @default(autoincrement())
+  grammar_id          Int
+  japanese_sentence   String @db.Text
+  chinese_translation String @db.Text
+  english_translation String @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) 
+}
+
+model Grammar {
+  id            Int     @id @default(autoincrement())
+  level_id      Int
+  grammar_point String @db.VarChar(70)
+  explanation   String @db.Text
+  href          String @db.VarChar(70)
+  meaning       String @db.VarChar(255)
+  connection    String @db.VarChar(255)
+  initial       String @db.VarChar(5)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now())
+}
+
+model Level {
+  id          Int    @id @default(autoincrement())
+  level_name  String @db.VarChar(10)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+}
+
+model Note {
+  id          Int    @id @default(autoincrement())
+  user_id     Int
+  example_id  Int
+  grammar_id  Int
+  content     String? @db.Text
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+}
+
+model Sentence {
+  id         Int    @id @default(autoincrement())
+  user_id    Int
+  example_id Int
+  status     String? @db.VarChar(5)
+  jap_input  String? @db.VarChar(255)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
