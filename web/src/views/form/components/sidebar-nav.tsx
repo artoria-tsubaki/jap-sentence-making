@@ -3,14 +3,12 @@
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { useState } from "react"
+import { Grammar } from "@/api/modules/form"
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   activeId: number
   onNavClick: (id: number) => void
-  items: {
-    id: number
-    title: string
-  }[]
+  items: Grammar[]
 }
 
 export function SidebarNav({ className, activeId, onNavClick, items, ...props }: SidebarNavProps) {
@@ -35,7 +33,7 @@ export function SidebarNav({ className, activeId, onNavClick, items, ...props }:
           )}
           onClick={() => onNavClick(item.id)}
         >
-          {item.title}
+          {item.grammar_point}
         </div>
       ))}
     </nav>

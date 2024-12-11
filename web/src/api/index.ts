@@ -1,5 +1,5 @@
 import NProgress from "@/config/nprogress";
-import axios, { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { showFullScreenLoading, tryHideFullScreenLoading } from "@/config/serviceLoading";
 import { ResultData } from "@/api/interface";
 import { ResultEnum } from "@/enums/httpEnum";
@@ -7,7 +7,7 @@ import { checkStatus } from "./helper/checkStatus";
 import { AxiosCanceler } from "./helper/axiosCancel";
 import { setToken } from "@/redux/modules/global/action";
 import { store } from "@/redux";
-import { toastError } from '@/utils/toast'
+import { message } from 'antd';
 
 const axiosCanceler = new AxiosCanceler();
 
@@ -41,7 +41,8 @@ class RequestHttp {
 				// * 如果当前请求不需要显示 loading,在api服务中通过指定的第三个参数: { headers: { noLoading: true } }来控制不显示loading，参见loginApi
 				config.headers!.noLoading || showFullScreenLoading();
 				const token: string = store.getState().global.token;
-				return { ...config, headers: { ...config.headers, "x-access-token": token } };
+        console.log(store.getState(), token);
+				return { ...config, headers: { ...config.headers, "authorization": 'Bearer ' + token } } as unknown as InternalAxiosRequestConfig ;
 			},
 			(error: AxiosError) => {
 				return Promise.reject(error);
@@ -62,13 +63,13 @@ class RequestHttp {
 				// * 登录失效（code == 599）
 				if (data.code == ResultEnum.OVERDUE) {
 					store.dispatch(setToken(""));
-					toastError(data.msg);
+					message.error(data.msg);
 					window.location.hash = "/login";
 					return Promise.reject(data);
 				}
 				// * 全局错误信息拦截（防止下载文件得时候返回数据流，没有code，直接报错）
 				if (data.code && data.code !== ResultEnum.SUCCESS) {
-					toastError(data.msg);
+					message.error(data.msg);
 					return Promise.reject(data);
 				}
 				// * 成功请求（在页面上除非特殊情况，否则不用处理失败逻辑）
@@ -79,7 +80,7 @@ class RequestHttp {
 				NProgress.done();
 				tryHideFullScreenLoading();
 				// 请求超时单独判断，请求超时没有 response
-				if (error.message.indexOf("timeout") !== -1) toastError("请求超时，请稍后再试");
+				if (error.message.indexOf("timeout") !== -1) message.error("请求超时，请稍后再试");
 				// 根据响应的错误状态码，做不同的处理
 				if (response) checkStatus(response.status);
 				// 服务器结果都没有返回(可能服务器错误可能客户端断网) 断网处理:可以跳转到断网页面

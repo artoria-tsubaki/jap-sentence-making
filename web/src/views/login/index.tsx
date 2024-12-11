@@ -12,10 +12,16 @@ import { Label } from "@/components/ui/label"
 import { useState } from "react";
 import { registerApi } from "../../api/modules/login";
 import { loginApi } from "../../api/modules/login";
+import { setToken } from "@/redux/modules/global/action";
+import { message } from 'antd';
+import { useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
 
-const login = () => {
+const login = (props: any) => {
+  const { setToken } = props;
+  const navigate = useNavigate();
+
   const [pageType, setPageType] = useState<"login"|"signup">("login");
-
   const [usernameValue, setUsernameValue] = useState('');
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsernameValue(event.target.value);
@@ -25,17 +31,25 @@ const login = () => {
     setPasswordValue(event.target.value);
   };
 
-  const onLogIn = () => {
+  const onLogIn = async () => {
     // TODO: Implement login
-    loginApi({ username: usernameValue, password: passwordValue }).then((res) => {
-      console.log(res);
-    })
+    const { data } = await loginApi({ username: usernameValue, password: passwordValue })
+    console.log(data);
+    setToken(data?.accessToken);
+    message.success("登录成功");
+    setTimeout(() => {
+      navigate("/form");
+    }, 1000);
   }
-  const onSignUp = () => {
+  const onSignUp = async () => {
     // TODO: Implement signup
-    registerApi({ username: usernameValue, password: passwordValue }).then((res) => {
-      console.log(res);
-    })
+    const { code } = await registerApi({ username: usernameValue, password: passwordValue });
+    if (code === 200) {
+      message.success("注册成功");
+      setPageType("login");
+    } else {
+      message.error("注册失败");
+    }
   }
 
   return (
@@ -81,4 +95,5 @@ const login = () => {
   )
 }
 
-export default login;
+const mapDispatchToProps = { setToken };
+export default connect(null, mapDispatchToProps)(login);

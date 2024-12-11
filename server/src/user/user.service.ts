@@ -15,9 +15,11 @@ export class UserService {
     // 先判断是否已经存在此用户名的用户
     const existingUser = await this.prisma.user.findUnique({
       where: {
-        username,
+        username: username,
       },
     })
+
+    console.log(existingUser)
 
     if (existingUser) {
       return {
@@ -27,7 +29,7 @@ export class UserService {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = this.prisma.user.create({
+    const newUser = await this.prisma.user.create({
       data: {
         username,
         password: hashedPassword,

@@ -1,21 +1,26 @@
 import { Separator } from '@/components/ui/separator'
 import { SidebarNav } from './components/sidebar-nav'
 import { MainForm } from './components/main-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-const sidebarNavItems = [
-  {
-    id: 4201,
-    title: '～あぐねる'
-  },
-  {
-    id: 4202,
-    title: '～ありき'
-  },
-]
+import { getGrammarApi } from '@/api/modules/form'
+import { Grammar } from '@/api/modules/form'
 
 const Form = () => {
-  const [activeId, setActiveId] = useState<number>(sidebarNavItems[0].id)
+  const [activeId, setActiveId] = useState<number>(0)
+  const [sidebarNavItems, setSidebarNavItems] = useState<Grammar[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await getGrammarApi({ level_id: '1', limit: 5 })
+      if(data) {
+        setSidebarNavItems(data)
+        setActiveId(data[0].id)
+      }
+    }
+
+    fetchData()
+  }, [])
 
   return (
     <>

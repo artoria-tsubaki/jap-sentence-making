@@ -3,12 +3,10 @@ import { Separator } from "@/components/ui/separator"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Grammar } from "@/api/modules/form"
 
 interface MainFormProps extends React.HTMLAttributes<HTMLElement> {
-  activeItem: {
-    id: number
-    title: string
-  }
+  activeItem: Grammar | undefined
 }
 
 export function MainForm({ activeItem }: MainFormProps) {
@@ -20,7 +18,7 @@ export function MainForm({ activeItem }: MainFormProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">{ activeItem.title }</h3>
+        <h3 className="text-lg font-medium">{ activeItem?.grammar_point }</h3>
         <p className="text-sm text-muted-foreground">
           This is how others will see you on the site.
         </p>

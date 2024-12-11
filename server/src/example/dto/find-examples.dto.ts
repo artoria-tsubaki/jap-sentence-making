@@ -9,5 +9,9 @@ export class FindExamplesDto {
 
   @IsOptional()
   @IsString()
+  grammar_id?: string;
+
+  @IsOptional()
+  @IsString()
   content?: string;
 }

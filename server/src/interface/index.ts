@@ -23,6 +23,12 @@ export interface ReqPage {
 	pageSize: number;
 }
 
+export interface SqlParams {
+  field: string;
+  value: any;
+  sql: string;
+}
+
 // * 登录
 export namespace Login {
 	export interface ReqLoginForm {
@@ -30,6 +36,6 @@ export namespace Login {
 		password: string;
 	}
 	export interface ResLogin {
-		access_token: string;
+		accessToken: string;
 	}
 }
