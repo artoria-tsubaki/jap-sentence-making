@@ -41,7 +41,6 @@ class RequestHttp {
 				// * 如果当前请求不需要显示 loading,在api服务中通过指定的第三个参数: { headers: { noLoading: true } }来控制不显示loading，参见loginApi
 				config.headers!.noLoading || showFullScreenLoading();
 				const token: string = store.getState().global.token;
-        console.log(store.getState(), token);
 				return { ...config, headers: { ...config.headers, "authorization": 'Bearer ' + token } } as unknown as InternalAxiosRequestConfig ;
 			},
 			(error: AxiosError) => {
@@ -60,13 +59,6 @@ class RequestHttp {
 				// * 在请求结束后，移除本次请求(关闭loading)
 				axiosCanceler.removePending(config);
 				tryHideFullScreenLoading();
-				// * 登录失效（code == 599）
-				if (data.code == ResultEnum.OVERDUE) {
-					store.dispatch(setToken(""));
-					message.error(data.msg);
-					window.location.hash = "/login";
-					return Promise.reject(data);
-				}
 				// * 全局错误信息拦截（防止下载文件得时候返回数据流，没有code，直接报错）
 				if (data.code && data.code !== ResultEnum.SUCCESS) {
 					message.error(data.msg);
@@ -76,13 +68,19 @@ class RequestHttp {
 				return data;
 			},
 			async (error: AxiosError) => {
-				const { response } = error;
+        const { response } = error;
 				NProgress.done();
 				tryHideFullScreenLoading();
 				// 请求超时单独判断，请求超时没有 response
 				if (error.message.indexOf("timeout") !== -1) message.error("请求超时，请稍后再试");
 				// 根据响应的错误状态码，做不同的处理
 				if (response) checkStatus(response.status);
+        // * 登录失效（code == 401）
+        if (response && response.status == ResultEnum.OVERDUE) {
+          store.dispatch(setToken(""));
+          window.location.hash = "/login";
+          return Promise.reject(error);
+        }
 				// 服务器结果都没有返回(可能服务器错误可能客户端断网) 断网处理:可以跳转到断网页面
 				if (!window.navigator.onLine) window.location.hash = "/500";
 				return Promise.reject(error);

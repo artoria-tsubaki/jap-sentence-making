@@ -26,6 +26,7 @@ export function SidebarNav({ className, activeId, onNavClick, items, ...props }:
           key={item.id}
           className={cn(
             buttonVariants({ variant: "ghost" }),
+            "whitespace-normal",
             activeId === item.id
               ? "bg-neutral-300 hover:bg-neutral-300"
               : "hover:bg-transparent hover:underline",

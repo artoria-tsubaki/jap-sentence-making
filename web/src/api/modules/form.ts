@@ -15,10 +15,31 @@ export interface Grammar {
   updated_at: string
 }
 
+export interface Example {
+  id: number
+  grammar_id: number
+  japanese_sentence: string
+  chinese_translation: string
+  english_translation: string
+  created_at: string
+  updated_at: string
+}
+
+export interface ExampleParams {
+  user_id?: number
+  grammar_id?: number
+  status?: string
+  content?: string
+}
+
 /**
  * @name 获取语法
  */
 // * 获取语法列表接口
 export const getGrammarApi = (params: { level_id: string, limit: number }) => {
 	return http.get<Grammar[]>(`/grammar`, params);
+}
+
+export const getExampleApi = (params: ExampleParams) => {
+	return http.get<Example[]>(`/example/findExample`, params);
 }

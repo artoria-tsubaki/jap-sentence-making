@@ -3,13 +3,13 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Example, Sentence } from '@prisma/client';
 import { FindExamplesDto } from './dto/find-examples.dto';
 import { concatSqlWhereParams } from '../utils'
-import { SqlParams } from 'src/interface';
+import { ResultData, SqlParams } from 'src/interface';
 
 @Injectable()
 export class ExampleService {
   constructor(private prisma: PrismaService) {}
 
-  async findExample(findExamplesDto: FindExamplesDto): Promise<Example[] & Sentence[]> {
+  async findExample(findExamplesDto: FindExamplesDto): Promise<ResultData<(Example & Sentence)[]>> {
     const { content, status, user_id, grammar_id } = findExamplesDto;
     let SQL = `
       SELECT e.*, s.status
@@ -46,6 +46,14 @@ export class ExampleService {
     ]
     SQL += concatSqlWhereParams(params)
     console.log(SQL)
-    return await this.prisma.$queryRawUnsafe(SQL);
+    const exampleList: (Example & Sentence)[] = await this.prisma.$queryRawUnsafe(SQL);
+
+    if(exampleList) {
+      return {
+        code: 200,
+        data: exampleList,
+        msg: 'success'
+      }
+    }
   }
 }
