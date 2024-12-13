@@ -45,18 +45,39 @@ export const columns: ColumnDef<Example & Sentence>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "level_name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Level" />
+    ),
+    cell: ({ row }) => <div className="w-[80px]"><Badge variant="outline">{row.getValue("level_name")}</Badge></div>,
+  },
+  {
     accessorKey: "japanese_sentence",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Sentence" />
+      <DataTableColumnHeader column={column} title="Japanese Sentence" />
     ),
     cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.label)
 
       return (
         <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
           <span className="max-w-[500px] truncate font-medium">
             {row.getValue("japanese_sentence")}
+          </span>
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: "chinese_translation",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Chinese Sentence" />
+    ),
+    cell: ({ row }) => {
+
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("chinese_translation")}
           </span>
         </div>
       )

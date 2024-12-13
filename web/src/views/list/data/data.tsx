@@ -11,27 +11,27 @@ import {
 
 export const labels = [
   {
-    value: "1",
+    value: "N0",
     label: "N0",
   },
   {
-    value: "2",
+    value: "N1",
     label: "N1",
   },
   {
-    value: "3",
+    value: "N2",
     label: "N2",
   },
   {
-    value: "4",
+    value: "N3",
     label: "N3",
   },
   {
-    value: "5",
+    value: "N4",
     label: "N4",
   },
   {
-    value: "6",
+    value: "N5",
     label: "N5",
   },
 ]
