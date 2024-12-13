@@ -67,6 +67,7 @@ model Sentence {
   user_id    Int
   example_id Int
   status     String? @db.VarChar(5)
+  priority   String? @db.VarChar(5)
   jap_input  String? @db.VarChar(255)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())

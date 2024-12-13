@@ -12,7 +12,7 @@ export class ExampleService {
   async findExample(findExamplesDto: FindExamplesDto): Promise<ResultData<(Example & Sentence)[]>> {
     const { content, status, user_id, grammar_id } = findExamplesDto;
     let SQL = `
-      SELECT e.*, s.status
+      SELECT e.*, s.status, s.priority
       FROM example e
       LEFT JOIN sentence s ON e.id = s.example_id
     `
@@ -47,6 +47,12 @@ export class ExampleService {
     SQL += concatSqlWhereParams(params)
     console.log(SQL)
     const exampleList: (Example & Sentence)[] = await this.prisma.$queryRawUnsafe(SQL);
+
+    exampleList.forEach(example => {
+        example.status = example.status ?? '0'
+        example.priority = example.priority ?? '1'
+      }
+    )
 
     if(exampleList) {
       return {

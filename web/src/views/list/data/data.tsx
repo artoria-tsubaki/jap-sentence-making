@@ -11,43 +11,55 @@ import {
 
 export const labels = [
   {
-    value: "bug",
-    label: "Bug",
+    value: "1",
+    label: "N0",
   },
   {
-    value: "feature",
-    label: "Feature",
+    value: "2",
+    label: "N1",
   },
   {
-    value: "documentation",
-    label: "Documentation",
+    value: "3",
+    label: "N2",
+  },
+  {
+    value: "4",
+    label: "N3",
+  },
+  {
+    value: "5",
+    label: "N4",
+  },
+  {
+    value: "6",
+    label: "N5",
   },
 ]
 
 export const statuses = [
   {
-    value: "backlog",
-    label: "Backlog",
+    value: "0",
+    label: "未测试",
     icon: HelpCircle,
   },
   {
-    value: "todo",
-    label: "Todo",
+    value: "1",
+    label: "简单",
     icon: Circle,
   },
   {
-    value: "in progress",
-    label: "In Progress",
+    value: "2",
+    label: "良好",
     icon: Timer,
   },
   {
-    value: "done",
-    label: "Done",
+    value: "3",
+    label: "困难",
     icon: CheckCircle,
   },
   {
-    value: "canceled",
-    label: "Canceled",
+    value: "4",
+    label: "搁置",
     icon: CircleOff,
   },
 ]
@@ -55,17 +67,17 @@ export const statuses = [
 export const priorities = [
   {
     label: "Low",
-    value: "low",
+    value: "0",
     icon: ArrowDown,
   },
   {
     label: "Medium",
-    value: "medium",
+    value: "1",
     icon: ArrowRight,
   },
   {
     label: "High",
-    value: "high",
+    value: "2",
     icon: ArrowUp,
   },
 ]

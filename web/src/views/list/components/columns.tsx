@@ -2,15 +2,15 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 
-import { Badge } from "@/components/ui/Badge"
-import { Checkbox } from "@/components/ui/Checkbox"
+import { Badge } from "../../../components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
 
 import { labels, priorities, statuses } from "../data/data"
-import { Task } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
+import { Example, Sentence } from "@/api/modules/form"
 
-export const columns: ColumnDef<Task>[] = [
+export const columns: ColumnDef<Example & Sentence>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -38,16 +38,16 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Task" />
+      <DataTableColumnHeader column={column} title="Id" />
     ),
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: "title",
+    accessorKey: "japanese_sentence",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
+      <DataTableColumnHeader column={column} title="Sentence" />
     ),
     cell: ({ row }) => {
       const label = labels.find((label) => label.value === row.original.label)
@@ -56,7 +56,7 @@ export const columns: ColumnDef<Task>[] = [
         <div className="flex space-x-2">
           {label && <Badge variant="outline">{label.label}</Badge>}
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("title")}
+            {row.getValue("japanese_sentence")}
           </span>
         </div>
       )

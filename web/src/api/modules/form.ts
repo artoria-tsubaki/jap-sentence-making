@@ -25,6 +25,14 @@ export interface Example {
   updated_at: string
 }
 
+export interface Sentence {
+  id: number
+  example_id: number
+  status: string
+  priority: string
+  jap_input: string
+}
+
 export interface ExampleParams {
   user_id?: number
   grammar_id?: number
@@ -41,5 +49,5 @@ export const getGrammarApi = (params: { level_id: string, limit: number }) => {
 }
 
 export const getExampleApi = (params: ExampleParams) => {
-	return http.get<Example[]>(`/example/findExample`, params);
+	return http.get<(Example & Sentence)[]>(`/example/findExample`, params);
 }
