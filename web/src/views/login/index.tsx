@@ -12,13 +12,13 @@ import { Label } from "@/components/ui/label"
 import { useState } from "react";
 import { registerApi } from "../../api/modules/login";
 import { loginApi } from "../../api/modules/login";
-import { setToken } from "@/redux/modules/global/action";
+import { setToken, setUserId } from "@/redux/modules/global/action";
 import { message } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 
 const login = (props: any) => {
-  const { setToken } = props;
+  const { setToken, setUserId } = props;
   const navigate = useNavigate();
 
   const [pageType, setPageType] = useState<"login"|"signup">("login");
@@ -36,6 +36,7 @@ const login = (props: any) => {
     const { data } = await loginApi({ username: usernameValue, password: passwordValue })
     console.log(data);
     setToken(data?.accessToken);
+    setUserId(data?.user_id);
     message.success("登录成功");
     setTimeout(() => {
       navigate("/form");
@@ -95,5 +96,5 @@ const login = (props: any) => {
   )
 }
 
-const mapDispatchToProps = { setToken };
+const mapDispatchToProps = { setToken, setUserId };
 export default connect(null, mapDispatchToProps)(login);

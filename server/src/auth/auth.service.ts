@@ -21,6 +21,7 @@ export class AuthService {
       code: 200,
       msg: 'login success',
       data: {
+        user_id: user.id,
         accessToken: this.jwtService.sign(payload)
       },
     };

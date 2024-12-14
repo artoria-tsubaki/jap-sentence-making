@@ -12,7 +12,9 @@ export class ExampleService {
   async findExample(findExamplesDto: FindExamplesDto): Promise<ResultData<(Example & Sentence)[]>> {
     const { content, status, user_id, grammar_id } = findExamplesDto;
     let SQL = `
-      SELECT e.*, s.status, s.priority, l.level_name
+      SELECT 
+      e.id as example_id, e.grammar_id , e.japanese_sentence, e.chinese_translation, e.english_translation, 
+      s.id as sentence_id, s.status, s.priority, s.jap_input, l.level_name
       FROM example e
       LEFT JOIN sentence s ON e.id = s.example_id
       LEFT JOIN grammar g ON e.grammar_id = g.id
@@ -53,6 +55,7 @@ export class ExampleService {
     exampleList.forEach(example => {
         example.status = example.status ?? '0'
         example.priority = example.priority ?? '1'
+        example.jap_input = example.jap_input ?? ''
       }
     )
 

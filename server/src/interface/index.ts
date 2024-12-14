@@ -37,5 +37,6 @@ export namespace Login {
 	}
 	export interface ResLogin {
 		accessToken: string;
+		user_id: number;
 	}
 }

@@ -63,7 +63,7 @@ model Note {
 }
 
 model Sentence {
-  id         Int    @id @default(autoincrement())
+  id         Int    @id @unique @default(autoincrement())
   user_id    Int
   example_id Int
   status     String? @db.VarChar(5)

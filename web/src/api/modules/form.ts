@@ -27,6 +27,7 @@ export interface Example {
 
 export interface Sentence {
   id: number
+  user_id: number
   example_id: number
   status: string
   priority: string
@@ -50,4 +51,8 @@ export const getGrammarApi = (params: { level_id: string, limit: number }) => {
 
 export const getExampleApi = (params: ExampleParams) => {
 	return http.get<(Example & Sentence)[]>(`/example/findExample`, params);
+}
+
+export const postSentenceApi = (params: Sentence[]) => {
+	return http.put<Sentence>(`/sentence/upset`, params);
 }

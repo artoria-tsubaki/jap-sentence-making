@@ -3,17 +3,17 @@ import { SidebarNav } from './components/sidebar-nav'
 import { MainForm } from './components/main-form'
 import { useEffect, useState } from 'react'
 
-import { getGrammarApi, getExampleApi } from '@/api/modules/form'
-import { Grammar, Example, ExampleParams } from '@/api/modules/form'
+import { getGrammarApi, getExampleApi, Sentence } from '@/api/modules/form'
+import { Grammar, Example } from '@/api/modules/form'
 
 const Form = () => {
   const [activeId, setActiveId] = useState<number>(0)
   const [sidebarNavItems, setSidebarNavItems] = useState<Grammar[]>([])
-  const [formListCache, setformListCache] = useState<{ [key: number]: Example[] }>({})
+  const [formListCache, setformListCache] = useState<{ [key: number]: (Example & Sentence)[] }>({})
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await getGrammarApi({ level_id: '6', limit: 5 })
+      const { data } = await getGrammarApi({ level_id: '5', limit: 5 })
       if(data) {
         setSidebarNavItems(data)
         setActiveId(data[0].id)
@@ -37,6 +37,16 @@ const Form = () => {
     fetchData()
   }, [activeId])
 
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target
+    setformListCache((prevCache) => {
+      const current = prevCache[activeId]
+      current.find(item => item.id === Number(id))!.jap_input = value
+      return { ...prevCache, [activeId]: current }
+    })
+  }
+
+
   return (
     <>
       <div className="hidden space-y-6 p-10 pb-16 md:block">
@@ -49,10 +59,18 @@ const Form = () => {
         <Separator className="my-6" />
         <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <aside className="-mx-4 lg:w-1/5">
-            <SidebarNav activeId={activeId} items={sidebarNavItems} onNavClick={ (id) => setActiveId(id) } />
+            <SidebarNav 
+              activeId={activeId} 
+              items={sidebarNavItems} 
+              onNavClick={ (id) => setActiveId(id) } 
+            />
           </aside>
           <div className="flex-1 lg:max-w-2xl">
-            <MainForm activeItem={ sidebarNavItems.find(item => item.id === activeId) } formList={formListCache[activeId]} />
+            <MainForm 
+              activeItem={ sidebarNavItems.find(item => item.id === activeId) } 
+              formList={formListCache[activeId]} 
+              onInputChange={onInputChange} 
+            />
           </div>
         </div>
       </div>
