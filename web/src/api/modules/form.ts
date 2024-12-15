@@ -16,7 +16,7 @@ export interface Grammar {
 }
 
 export interface Example {
-  id: number
+  example_id: number
   grammar_id: number
   japanese_sentence: string
   chinese_translation: string
@@ -26,7 +26,7 @@ export interface Example {
 }
 
 export interface Sentence {
-  id: number
+  sentence_id: number
   user_id: number
   example_id: number
   status: string

@@ -13,7 +13,7 @@ const Form = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await getGrammarApi({ level_id: '5', limit: 5 })
+      const { data } = await getGrammarApi({ level_id: '6', limit: 5 })
       if(data) {
         setSidebarNavItems(data)
         setActiveId(data[0].id)
@@ -41,7 +41,22 @@ const Form = () => {
     const { id, value } = e.target
     setformListCache((prevCache) => {
       const current = prevCache[activeId]
-      current.find(item => item.id === Number(id))!.jap_input = value
+      current.find(item => item.example_id === Number(id))!.jap_input = value
+      return { ...prevCache, [activeId]: current }
+    })
+  }
+
+  const onPriorityChange = (value: string, id:number) => {
+    setformListCache((prevCache) => {
+      const current = prevCache[activeId]
+      current.find(item => item.example_id === Number(id))!.priority = value
+      return { ...prevCache, [activeId]: current }
+    })
+  }
+  const onStatusChange = (value: string, id:number) => {
+    setformListCache((prevCache) => {
+      const current = prevCache[activeId]
+      current.find(item => item.example_id === Number(id))!.status = value
       return { ...prevCache, [activeId]: current }
     })
   }
@@ -70,6 +85,8 @@ const Form = () => {
               activeItem={ sidebarNavItems.find(item => item.id === activeId) } 
               formList={formListCache[activeId]} 
               onInputChange={onInputChange} 
+              onPriorityChange={onPriorityChange} 
+              onStatusChange={onStatusChange} 
             />
           </div>
         </div>

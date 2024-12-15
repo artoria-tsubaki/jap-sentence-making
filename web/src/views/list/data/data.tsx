@@ -2,11 +2,11 @@ import {
   ArrowDown,
   ArrowRight,
   ArrowUp,
-  CheckCircle,
-  Circle,
+  Frown,
+  HandMetal,
   CircleOff,
   HelpCircle,
-  Timer,
+  BadgeCheck,
 } from "lucide-react"
 
 export const labels = [
@@ -45,17 +45,17 @@ export const statuses = [
   {
     value: "1",
     label: "简单",
-    icon: Circle,
+    icon: HandMetal,
   },
   {
     value: "2",
     label: "良好",
-    icon: Timer,
+    icon: BadgeCheck,
   },
   {
     value: "3",
     label: "困难",
-    icon: CheckCircle,
+    icon: Frown,
   },
   {
     value: "4",
@@ -66,17 +66,17 @@ export const statuses = [
 
 export const priorities = [
   {
-    label: "Low",
+    label: "低",
     value: "0",
     icon: ArrowDown,
   },
   {
-    label: "Medium",
+    label: "普通",
     value: "1",
     icon: ArrowRight,
   },
   {
-    label: "High",
+    label: "高",
     value: "2",
     icon: ArrowUp,
   },
