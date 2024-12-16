@@ -19,8 +19,6 @@ export class UserService {
       },
     })
 
-    console.log(existingUser)
-
     if (existingUser) {
       return {
         code: 400,

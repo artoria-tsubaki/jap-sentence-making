@@ -49,7 +49,6 @@ export class ExampleService {
       }
     ]
     SQL += concatSqlWhereParams(params)
-    console.log(SQL)
     const exampleList: (Example & Sentence)[] = await this.prisma.$queryRawUnsafe(SQL);
 
     exampleList.forEach(example => {

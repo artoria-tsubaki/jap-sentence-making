@@ -22,8 +22,8 @@ interface MainFormProps extends React.HTMLAttributes<HTMLElement> {
 
 export function MainForm({ activeItem, formList, onInputChange, onPriorityChange, onStatusChange }: MainFormProps) {
 
-  const onShowNote = (example_id: number) => {
-    console.log(example_id);
+  const onShowNoteEditor = (id?: number) => {
+    if(id) {}
   }
 
   const onSubmit = async () => {
@@ -47,6 +47,12 @@ export function MainForm({ activeItem, formList, onInputChange, onPriorityChange
         <p className="text-sm text-muted-foreground">
           { activeItem?.explanation }
         </p>
+        <div 
+          className="flex items-center justify-center border-zinc-400 border border-solid rounded-full h-8 w-8 cursor-pointer"
+          onClick={() => onShowNoteEditor(activeItem?.id)}
+        >
+          <NotebookPen className="h-4 w-4" />
+        </div>
       </div>
       <Separator />
       <form>
@@ -75,7 +81,7 @@ export function MainForm({ activeItem, formList, onInputChange, onPriorityChange
                                 onValueChange={(value: string) => onStatusChange(value, formItem.example_id)}
                                 dropdownMenuItems={statuses}
                               ></AttrDropdownRadio>
-                              <NotebookPen className="w-4 h-4 cursor-pointer" onClick={() => onShowNote(formItem.example_id)} />
+                              <NotebookPen className="w-4 h-4 cursor-pointer" onClick={() => onShowNoteEditor(formItem.example_id)} />
                             </div>
                         </div>
                         <Separator className="bg-gray-400" />

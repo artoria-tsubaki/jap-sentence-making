@@ -1,10 +1,12 @@
 import { Separator } from '@/components/ui/separator'
 import { SidebarNav } from './components/sidebar-nav'
 import { MainForm } from './components/main-form'
+import { NoteEditor } from './components/note-editor'
 import { useEffect, useState } from 'react'
 
 import { getGrammarApi, getExampleApi, Sentence } from '@/api/modules/form'
 import { Grammar, Example } from '@/api/modules/form'
+import { Button } from '@/components/ui/button'
 
 const Form = () => {
   const [activeId, setActiveId] = useState<number>(0)
@@ -80,7 +82,7 @@ const Form = () => {
               onNavClick={ (id) => setActiveId(id) } 
             />
           </aside>
-          <div className="flex-1 lg:max-w-2xl">
+          <div className="lg:w-2/5 lg:max-w-3xl">
             <MainForm 
               activeItem={ sidebarNavItems.find(item => item.id === activeId) } 
               formList={formListCache[activeId]} 
@@ -88,6 +90,9 @@ const Form = () => {
               onPriorityChange={onPriorityChange} 
               onStatusChange={onStatusChange} 
             />
+          </div>
+          <div className="lg:w-2/5">
+            <NoteEditor />
           </div>
         </div>
       </div>
