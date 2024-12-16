@@ -11,6 +11,7 @@ import { message } from 'antd'
 import { AttrDropdownRadio } from "./attrDropdownRadio"
 import { priorities, statuses } from "@/views/list/data/data"
 import { NotebookPen } from "lucide-react"
+import { NotePointer } from "../interfaces"
 
 interface MainFormProps extends React.HTMLAttributes<HTMLElement> {
   activeItem: Grammar | undefined;
@@ -18,13 +19,19 @@ interface MainFormProps extends React.HTMLAttributes<HTMLElement> {
   onInputChange: React.ChangeEventHandler<HTMLInputElement>;
   onPriorityChange: (value: string, id: number) => void;
   onStatusChange: (value: string, id: number) => void;
+  onNoteShow: React.Dispatch<React.SetStateAction<boolean>>;
+  onSetPointer: React.Dispatch<React.SetStateAction<NotePointer>>;
 }
 
-export function MainForm({ activeItem, formList, onInputChange, onPriorityChange, onStatusChange }: MainFormProps) {
-
-  const onShowNoteEditor = (id?: number) => {
-    if(id) {}
-  }
+export function MainForm({ 
+  activeItem, 
+  formList, 
+  onInputChange, 
+  onPriorityChange, 
+  onStatusChange,
+  onNoteShow,
+  onSetPointer 
+}: MainFormProps) {
 
   const onSubmit = async () => {
     // TODO: Implement form submission
@@ -39,20 +46,26 @@ export function MainForm({ activeItem, formList, onInputChange, onPriorityChange
       message.success('提交成功');
     }
   }
+  const onNoteIconCick = (props: NotePointer) => {
+    onNoteShow(true);
+    onSetPointer(props);
+  }
 
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">{ activeItem?.grammar_point }</h3>
-        <p className="text-sm text-muted-foreground">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-medium">{ activeItem?.grammar_point }</h3>
+          <div 
+            className="flex items-center justify-center border-zinc-400 border border-solid rounded-full h-8 w-8 cursor-pointer"
+            onClick={() => onNoteIconCick({ id: activeItem?.id, type: 'Grammar', title: activeItem?.grammar_point })}
+          >
+            <NotebookPen className="h-4 w-4" />
+          </div>
+        </div>
+        <p className="text-sm text-muted-foreground mt-2">
           { activeItem?.explanation }
         </p>
-        <div 
-          className="flex items-center justify-center border-zinc-400 border border-solid rounded-full h-8 w-8 cursor-pointer"
-          onClick={() => onShowNoteEditor(activeItem?.id)}
-        >
-          <NotebookPen className="h-4 w-4" />
-        </div>
       </div>
       <Separator />
       <form>
@@ -81,7 +94,7 @@ export function MainForm({ activeItem, formList, onInputChange, onPriorityChange
                                 onValueChange={(value: string) => onStatusChange(value, formItem.example_id)}
                                 dropdownMenuItems={statuses}
                               ></AttrDropdownRadio>
-                              <NotebookPen className="w-4 h-4 cursor-pointer" onClick={() => onShowNoteEditor(formItem.example_id)} />
+                              <NotebookPen className="w-4 h-4 cursor-pointer" onClick={() => onNoteIconCick({ id: formItem.example_id, type: 'Sentence', title: formItem.japanese_sentence })} />
                             </div>
                         </div>
                         <Separator className="bg-gray-400" />

@@ -6,12 +6,15 @@ import { useEffect, useState } from 'react'
 
 import { getGrammarApi, getExampleApi, Sentence } from '@/api/modules/form'
 import { Grammar, Example } from '@/api/modules/form'
-import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { NotePointer } from './interfaces'
 
 const Form = () => {
   const [activeId, setActiveId] = useState<number>(0)
   const [sidebarNavItems, setSidebarNavItems] = useState<Grammar[]>([])
   const [formListCache, setformListCache] = useState<{ [key: number]: (Example & Sentence)[] }>({})
+  const [noteShow, setNoteShow] = useState<boolean>(false)
+  const [notePointer, setNotePointer] = useState<NotePointer>({})
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +65,11 @@ const Form = () => {
       return { ...prevCache, [activeId]: current }
     })
   }
+  const onNoteEditorSubmit = () => {
+    // 调用接口关闭笔记
+    setNoteShow(false)
+    console.log(notePointer)
+  }
 
 
   return (
@@ -82,17 +90,19 @@ const Form = () => {
               onNavClick={ (id) => setActiveId(id) } 
             />
           </aside>
-          <div className="lg:w-2/5 lg:max-w-3xl">
+          <div className={cn("lg:max-w-4xl", noteShow ? "lg:w-2/5" : "lg:w-4/5")}>
             <MainForm 
               activeItem={ sidebarNavItems.find(item => item.id === activeId) } 
               formList={formListCache[activeId]} 
               onInputChange={onInputChange} 
               onPriorityChange={onPriorityChange} 
-              onStatusChange={onStatusChange} 
+              onStatusChange={onStatusChange}
+              onNoteShow={setNoteShow}
+              onSetPointer={setNotePointer}
             />
           </div>
-          <div className="lg:w-2/5">
-            <NoteEditor />
+          <div className={cn("lg:w-2/5", noteShow ? "block" : "hidden")}>
+            <NoteEditor onSubmit={onNoteEditorSubmit} pointer={notePointer} />
           </div>
         </div>
       </div>

@@ -4,8 +4,14 @@ import React, { useState, useEffect } from 'react'
 import { Editor, Toolbar } from '@wangeditor/editor-for-react'
 import { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor'
 import { Button } from '@/components/ui/button'
+import { NotePointer } from '../interfaces'
 
-export function NoteEditor () {
+interface NoteEditorProps extends React.HTMLAttributes<HTMLDivElement>{
+  onSubmit: () => void;
+  pointer: NotePointer
+}
+
+export function NoteEditor ({ onSubmit, pointer }: NoteEditorProps) {
   // editor 实例
   const [editor, setEditor] = useState<IDomEditor | null>(null) // TS 语法
   // const [editor, setEditor] = useState(null)                   // JS 语法
@@ -40,11 +46,11 @@ export function NoteEditor () {
 
   return (
     <>
-      <div className='w-full' style={{ border: '1px solid #ccc', zIndex: 100 }}>
+      <div className='w-full relative' style={{ border: '1px solid #ccc', zIndex: 100 }}>
         <Toolbar
           editor={editor}
           defaultConfig={toolbarConfig}
-          mode="simple"
+          mode="default"
           style={{ borderBottom: '1px solid #ccc' }}
         />
         <Editor
@@ -52,11 +58,18 @@ export function NoteEditor () {
           value={html}
           onCreated={setEditor}
           onChange={(editor) => setHtml(editor.getHtml())}
-          mode="simple"
+          mode="default"
           style={{ height: '500px', overflowY: 'hidden' }}
+          className='pb-[80px]'
         />
+        <div className='flex flex-col justify-center px-4 absolute bottom-[10px] left-1/2 -translate-x-1/2 w-10/12 h-[60px] bg-primary rounded-lg'>
+          <p className="text-white">{pointer.type}</p>
+          <div className="text-zinc-300 truncate" title={pointer.title}>{pointer.title}</div>
+        </div>
       </div>
-      <Button>Submit Note</Button>
+      <div className='flex justify-center mt-4'>
+        <Button onClick={onSubmit}>Submit Note</Button>
+      </div>
     </>
   )
 }
