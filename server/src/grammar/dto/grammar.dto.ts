@@ -1,6 +1,10 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsNumber, IsString } from 'class-validator';
 
 export class GrammarDto {
+  @IsNumber()
+  @IsOptional()
+  user_id: number
+
   @IsString()
   @IsOptional()
   level_id?: string;

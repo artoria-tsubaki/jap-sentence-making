@@ -8,6 +8,7 @@ import { getGrammarApi, getExampleApi, Sentence } from '@/api/modules/form'
 import { Grammar, Example } from '@/api/modules/form'
 import { cn } from '@/lib/utils'
 import { NotePointer } from './interfaces'
+import { store } from '@/redux'
 
 const Form = () => {
   const [activeId, setActiveId] = useState<number>(0)
@@ -16,9 +17,11 @@ const Form = () => {
   const [noteShow, setNoteShow] = useState<boolean>(false)
   const [notePointer, setNotePointer] = useState<NotePointer>({})
 
+  const userId = store.getState().global.userId;
+
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await getGrammarApi({ level_id: '6', limit: 5 })
+      const { data } = await getGrammarApi({ level_id: '6', limit: 5, user_id: userId })
       if(data) {
         setSidebarNavItems(data)
         setActiveId(data[0].id)
@@ -32,7 +35,7 @@ const Form = () => {
     // 刷新 formList
     const fetchData = async () => {
       if(!formListCache[activeId]) {
-        const { data } = await getExampleApi({ grammar_id: activeId })
+        const { data } = await getExampleApi({ grammar_id: activeId, user_id: userId })
         if(data) {
           setformListCache((prevCache) => ({ ...prevCache, [activeId]: data}))
         }

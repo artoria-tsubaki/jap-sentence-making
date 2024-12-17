@@ -8,12 +8,17 @@ import { ResultData } from 'src/interface';
 export class GrammarService {
   constructor(private prisma: PrismaService) { }
 
-  async findGrammar({ level_id, limit }: GrammarDto): Promise<ResultData<Grammar[]>> {
+  async findGrammar({ level_id, limit, user_id }: GrammarDto): Promise<ResultData<Grammar[]>> {
     let SQL = `
-      SELECT * FROM grammar
+      SELECT g.*, n.id as note_id, n.content as note_content
+      FROM grammar g
+      LEFT JOIN note n ON g.id = n.grammar_id
     `
+    if (user_id) {
+      SQL += ` WHERE (n.user_id is null or n.user_id = ${user_id})`
+    }
     if (level_id) {
-      SQL += ` WHERE level_id = ${level_id}`
+      SQL += ` AND g.level_id = ${level_id}`
     }
     if (limit) {
       SQL += ` LIMIT ${limit}`

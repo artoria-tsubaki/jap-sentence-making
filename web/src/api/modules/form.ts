@@ -45,7 +45,7 @@ export interface ExampleParams {
  * @name 获取语法
  */
 // * 获取语法列表接口
-export const getGrammarApi = (params: { level_id: string, limit: number }) => {
+export const getGrammarApi = (params: { level_id: string, limit: number, user_id: number }) => {
 	return http.get<Grammar[]>(`/grammar`, params);
 }
 

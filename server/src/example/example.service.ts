@@ -14,9 +14,12 @@ export class ExampleService {
     let SQL = `
       SELECT 
       e.id as example_id, e.grammar_id , e.japanese_sentence, e.chinese_translation, e.english_translation, 
-      s.id as sentence_id, s.status, s.priority, s.jap_input, l.level_name
+      s.id as sentence_id, s.status, s.priority, s.jap_input, 
+      l.level_name,
+      n.id as note_id, n.content as note_content
       FROM example e
       LEFT JOIN sentence s ON e.id = s.example_id
+      LEFT JOIN note n ON e.id = n.example_id
       LEFT JOIN grammar g ON e.grammar_id = g.id
       LEFT JOIN level l ON g.level_id = l.id
     `
@@ -25,7 +28,7 @@ export class ExampleService {
       {
         field: 'user_id',
         value: user_id,
-        sql: `s.user_id=${user_id}`
+        sql: `(s.user_id=${user_id} or s.user_id is null) AND (n.user_id=${user_id} or n.user_id is null)`
       },
       {
         field: 'grammar_id',
