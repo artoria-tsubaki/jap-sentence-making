@@ -55,8 +55,8 @@ model Level {
 model Note {
   id          Int    @id @default(autoincrement())
   user_id     Int
-  example_id  Int
-  grammar_id  Int
+  example_id  Int?
+  grammar_id  Int?
   content     String? @db.Text
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now())
