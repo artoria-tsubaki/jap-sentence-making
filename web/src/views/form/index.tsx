@@ -4,16 +4,17 @@ import { MainForm } from './components/main-form'
 import { NoteEditor } from './components/note-editor'
 import { useEffect, useState } from 'react'
 
-import { getGrammarApi, getExampleApi, Sentence } from '@/api/modules/form'
+import { getGrammarApi, getExampleApi, postNoteApi, Sentence, Note, NoteParams } from '@/api/modules/form'
 import { Grammar, Example } from '@/api/modules/form'
 import { cn } from '@/lib/utils'
 import { NotePointer } from './interfaces'
 import { store } from '@/redux'
+import { message } from 'antd'
 
 const Form = () => {
   const [activeId, setActiveId] = useState<number>(0)
-  const [sidebarNavItems, setSidebarNavItems] = useState<Grammar[]>([])
-  const [formListCache, setformListCache] = useState<{ [key: number]: (Example & Sentence)[] }>({})
+  const [sidebarNavItems, setSidebarNavItems] = useState<(Grammar & Note)[]>([])
+  const [formListCache, setformListCache] = useState<{ [key: number]: (Example & Sentence & Note)[] }>({})
   const [noteShow, setNoteShow] = useState<boolean>(false)
   const [notePointer, setNotePointer] = useState<NotePointer>({})
 
@@ -68,10 +69,43 @@ const Form = () => {
       return { ...prevCache, [activeId]: current }
     })
   }
-  const onNoteEditorSubmit = () => {
-    // 调用接口关闭笔记
-    setNoteShow(false)
-    console.log(notePointer)
+  const onNoteShowChange = (props: NotePointer) => {
+    if(props.id === notePointer.id || notePointer.id === undefined) {
+      setNoteShow(!noteShow)
+    }
+  }
+  const onNoteEditorSubmit = async (content: string) => {
+    setNotePointer(prev => ({ ...prev, content }))
+    const postParams: NoteParams = {
+      user_id: userId,
+      note_content: content
+    }
+    if(notePointer.type === 'Sentence') {
+      postParams['example_id'] = notePointer.id
+    }
+    if(notePointer.type === 'Grammar') {
+      postParams['grammar_id'] = notePointer.id
+    }
+    const res = await postNoteApi(postParams);
+    if(res.code === 200) {
+      message.success('提交笔记成功')
+      if(notePointer.type === 'Sentence') {
+        setformListCache((prevCache) => {
+          const current = prevCache[activeId]
+          current.find(item => item.example_id === notePointer.id)!.note_content = content
+          return { ...prevCache, [activeId]: current }
+        })
+      }
+      if(notePointer.type === 'Grammar') {
+        // setSidebarNavItems((prev) => {
+        //   const current = prev.find(item => item.grammar_id === notePointer.id)!
+        //   return [...prev.filter(item => item.grammar_id !== notePointer.id), { ...current, note_content: content }]
+        // })
+        setSidebarNavItems(sidebarNavItems.map(item => item.grammar_id === notePointer.id ? { ...item, note_content: content } : item))
+      }
+    } else {
+      message.error('提交笔记失败')
+    }
   }
 
 
@@ -100,12 +134,12 @@ const Form = () => {
               onInputChange={onInputChange} 
               onPriorityChange={onPriorityChange} 
               onStatusChange={onStatusChange}
-              onNoteShow={setNoteShow}
+              onNoteShow={onNoteShowChange}
               onSetPointer={setNotePointer}
             />
           </div>
           <div className={cn("lg:w-2/5", noteShow ? "block" : "hidden")}>
-            <NoteEditor onSubmit={onNoteEditorSubmit} pointer={notePointer} />
+            <NoteEditor onEditorSubmit={onNoteEditorSubmit} pointer={notePointer} />
           </div>
         </div>
       </div>

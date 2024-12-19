@@ -5,7 +5,7 @@ export class NoteDto {
   user_id: number;
 
   @IsString()
-  content: string;
+  note_content: string;
 
   @IsNumber()
   @IsOptional()
@@ -14,8 +14,4 @@ export class NoteDto {
   @IsNumber()
   @IsOptional()
   example_id?: number;
-
-  @IsOptional()
-  @IsString()
-  email?: string;
 }

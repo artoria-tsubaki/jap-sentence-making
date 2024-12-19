@@ -37,7 +37,7 @@ export function AttrDropdownRadio({ title, value, onValueChange, dropdownMenuIte
           {
             dropdownMenuItems.map((item: { label: string; value: string, icon: unknown }) => {
               return (
-                <DropdownMenuRadioItem value={item.value}>{item.label}</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem key={item.value} value={item.value}>{item.label}</DropdownMenuRadioItem>
               )
             })
           }

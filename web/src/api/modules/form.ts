@@ -1,6 +1,5 @@
-import { ResultData } from "@/api/interface/index";
-
 import http from "@/api";
+import { Result } from "../interface";
 
 export interface Grammar {
   id: number
@@ -34,6 +33,14 @@ export interface Sentence {
   jap_input: string
 }
 
+export interface Note {
+  note_id?: number
+  user_id: number   
+  example_id?: number
+  grammar_id?: number
+  note_content: string   
+}
+
 export interface ExampleParams {
   user_id?: number
   grammar_id?: number
@@ -41,18 +48,32 @@ export interface ExampleParams {
   content?: string
 }
 
+export interface NoteParams {
+  user_id?: number
+  grammar_id?: number
+  example_id?: number
+  note_content?: string
+}
+
 /**
  * @name 获取语法
  */
 // * 获取语法列表接口
 export const getGrammarApi = (params: { level_id: string, limit: number, user_id: number }) => {
-	return http.get<Grammar[]>(`/grammar`, params);
+	return http.get<(Grammar & Note)[]>(`/grammar`, params);
 }
 
+// * 获取例句列表接口
 export const getExampleApi = (params: ExampleParams) => {
-	return http.get<(Example & Sentence)[]>(`/example/findExample`, params);
+	return http.get<(Example & Sentence & Note)[]>(`/example/findExample`, params);
 }
 
-export const postSentenceApi = (params: Sentence[]) => {
+// * 提交造句接口
+export const putSentenceApi = (params: Sentence[]) => {
 	return http.put<Sentence>(`/sentence/upset`, params);
+}
+
+// * 提交造句接口
+export const postNoteApi = (params: NoteParams) => {
+	return http.post<Result>(`/note/create`, params);
 }

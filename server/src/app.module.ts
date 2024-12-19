@@ -9,9 +9,10 @@ import { ExampleController } from './example/example.controller';
 import { ExampleModule } from './example/example.module';
 import { AuthModule } from './auth/auth.module';
 import { SentenceModule } from './sentence/sentence.module';
+import { NoteModule } from './note/note.module';
 
 @Module({
-  imports: [UserModule, GrammarModule, ExampleModule, AuthModule, SentenceModule],
+  imports: [UserModule, GrammarModule, ExampleModule, AuthModule, SentenceModule, NoteModule],
   controllers: [AppController, ExampleController],
   providers: [AppService, PrismaService, ExampleService],
 })

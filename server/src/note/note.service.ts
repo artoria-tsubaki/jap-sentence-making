@@ -16,7 +16,7 @@ export class NoteService {
       }
     }
     const data: Prisma.NoteUncheckedCreateInput = {
-      content: note.content,
+      content: note.note_content,
       user_id: note.user_id,
     }
     if(note.grammar_id) {

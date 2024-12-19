@@ -7,24 +7,22 @@ import { Button } from '@/components/ui/button'
 import { NotePointer } from '../interfaces'
 
 interface NoteEditorProps extends React.HTMLAttributes<HTMLDivElement>{
-  onSubmit: () => void;
+  onEditorSubmit: (value: string) => Promise<void>;
   pointer: NotePointer
 }
 
-export function NoteEditor ({ onSubmit, pointer }: NoteEditorProps) {
+export function NoteEditor ({ onEditorSubmit, pointer }: NoteEditorProps) {
   // editor 实例
   const [editor, setEditor] = useState<IDomEditor | null>(null) // TS 语法
-  // const [editor, setEditor] = useState(null)                   // JS 语法
+  const [html, setHtml] = useState<string>('')
+  
 
-  // 编辑器内容
-  const [html, setHtml] = useState('<p>hello</p>')
-
-  // 模拟 ajax 请求，异步设置 html
+  // // 模拟 ajax 请求，异步设置 html
   useEffect(() => {
     setTimeout(() => {
-      setHtml('<p>hello world</p>')
-    }, 1500)
-  }, [])
+      setHtml(pointer.content || '')
+    })
+  }, [pointer])
 
   // 工具栏配置
   const toolbarConfig: Partial<IToolbarConfig> = {} // TS 语法
@@ -68,7 +66,7 @@ export function NoteEditor ({ onSubmit, pointer }: NoteEditorProps) {
         </div>
       </div>
       <div className='flex justify-center mt-4'>
-        <Button onClick={onSubmit}>Submit Note</Button>
+        <Button onClick={() => {onEditorSubmit(html)}}>Submit Note</Button>
       </div>
     </>
   )
