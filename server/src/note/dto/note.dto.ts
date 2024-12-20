@@ -2,6 +2,9 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class NoteDto {
   @IsNumber()
+  id: number;
+
+  @IsNumber()
   user_id: number;
 
   @IsString()

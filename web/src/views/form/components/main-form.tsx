@@ -12,10 +12,13 @@ import { AttrDropdownRadio } from "./attrDropdownRadio"
 import { priorities, statuses } from "@/views/list/data/data"
 import { NotebookPen } from "lucide-react"
 import { NotePointer } from "../interfaces"
+import { cn } from "@/lib/utils"
 
 interface MainFormProps extends React.HTMLAttributes<HTMLElement> {
   activeItem: (Grammar & Note) | undefined;
   formList: (Example & Sentence & Note)[];
+  pointer: NotePointer;
+  noteShow: boolean;
   onInputChange: React.ChangeEventHandler<HTMLInputElement>;
   onPriorityChange: (value: string, id: number) => void;
   onStatusChange: (value: string, id: number) => void;
@@ -25,7 +28,9 @@ interface MainFormProps extends React.HTMLAttributes<HTMLElement> {
 
 export function MainForm({ 
   activeItem, 
-  formList, 
+  formList,
+  pointer,
+  noteShow, 
   onInputChange, 
   onPriorityChange, 
   onStatusChange,
@@ -62,7 +67,12 @@ export function MainForm({
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">{ activeItem?.grammar_point }</h3>
           <div 
-            className="flex items-center justify-center border-zinc-400 border border-solid rounded-full h-8 w-8 cursor-pointer"
+            className={
+              cn(
+                "flex items-center justify-center border-zinc-400 border border-solid rounded-full h-8 w-8 cursor-pointer",
+                (activeItem?.id === pointer.id && noteShow) ? 'bg-primary text-white' : ''
+              )
+            }
             onClick={() => onNoteIconCick({ id: activeItem?.id, type: 'Grammar', title: activeItem?.grammar_point, content: activeItem?.note_content, note_id: activeItem?.note_id })}
           >
             <NotebookPen className="h-4 w-4" />
@@ -99,7 +109,17 @@ export function MainForm({
                                 onValueChange={(value: string) => onStatusChange(value, formItem.example_id)}
                                 dropdownMenuItems={statuses}
                               ></AttrDropdownRadio>
-                              <NotebookPen className="w-4 h-4 cursor-pointer" onClick={() => onNoteIconCick({ id: formItem.example_id, type: 'Sentence', title: formItem.japanese_sentence, content: formItem?.note_content, note_id: formItem?.note_id })} />
+                              <NotebookPen 
+                                className={cn(
+                                    "w-4 h-4 cursor-pointer", 
+                                    (formItem.example_id === pointer.id && noteShow) ? "text-blue-500" : ""
+                                  )
+                                } 
+                                onClick={
+                                  () => onNoteIconCick(
+                                    { id: formItem.example_id, type: 'Sentence', title: formItem.japanese_sentence, content: formItem?.note_content, note_id: formItem?.note_id }
+                                  )
+                                } />
                             </div>
                         </div>
                         <Separator className="bg-gray-400" />

@@ -7,11 +7,12 @@ import { Button } from '@/components/ui/button'
 import { NotePointer } from '../interfaces'
 
 interface NoteEditorProps extends React.HTMLAttributes<HTMLDivElement>{
+  onNoteDelete: () => Promise<void>;
   onEditorSubmit: (value: string) => Promise<void>;
   pointer: NotePointer
 }
 
-export function NoteEditor ({ onEditorSubmit, pointer }: NoteEditorProps) {
+export function NoteEditor ({ onNoteDelete, onEditorSubmit, pointer }: NoteEditorProps) {
   // editor 实例
   const [editor, setEditor] = useState<IDomEditor | null>(null) // TS 语法
   const [html, setHtml] = useState<string>('')
@@ -65,8 +66,13 @@ export function NoteEditor ({ onEditorSubmit, pointer }: NoteEditorProps) {
           <div className="text-zinc-300 truncate" title={pointer.title}>{pointer.title}</div>
         </div>
       </div>
-      <div className='flex justify-center mt-4'>
+      <div className='flex justify-between mt-4 align-center'>
+        <div 
+          className='text-red-500 cursor-pointer py-2'
+          onClick={()=>{onNoteDelete()}}
+        >Delete Note</div>
         <Button onClick={() => {onEditorSubmit(html)}}>Submit Note</Button>
+        <span></span>
       </div>
     </>
   )

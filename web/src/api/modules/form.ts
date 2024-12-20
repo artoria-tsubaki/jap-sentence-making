@@ -1,5 +1,5 @@
 import http from "@/api";
-import { Result } from "../interface";
+import { Result, ResultData } from "../interface";
 
 export interface Grammar {
   id: number
@@ -38,7 +38,7 @@ export interface Note {
   user_id: number   
   example_id?: number
   grammar_id?: number
-  note_content: string   
+  note_content?: string   
 }
 
 export interface ExampleParams {
@@ -49,6 +49,7 @@ export interface ExampleParams {
 }
 
 export interface NoteParams {
+  id?: number
   user_id?: number
   grammar_id?: number
   example_id?: number
@@ -73,7 +74,17 @@ export const putSentenceApi = (params: Sentence[]) => {
 	return http.put<Sentence>(`/sentence/upset`, params);
 }
 
-// * 提交造句接口
+// * 创建接口
 export const postNoteApi = (params: NoteParams) => {
-	return http.post<Result>(`/note/create`, params);
+	return http.post<number>(`/note/create`, params);
+}
+
+// * 修改笔记接口
+export const putNoteApi = (params: NoteParams) => {
+	return http.put<number>(`/note/update`, params);
+}
+
+// * 删除造句接口
+export const deleteNoteApi = (node_id: number) => {
+	return http.delete<number>(`/note/${node_id}`);
 }

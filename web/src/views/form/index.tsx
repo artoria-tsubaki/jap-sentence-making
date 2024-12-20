@@ -4,12 +4,13 @@ import { MainForm } from './components/main-form'
 import { NoteEditor } from './components/note-editor'
 import { useEffect, useState } from 'react'
 
-import { getGrammarApi, getExampleApi, postNoteApi, Sentence, Note, NoteParams } from '@/api/modules/form'
+import { getGrammarApi, getExampleApi, postNoteApi, putNoteApi, deleteNoteApi, Sentence, Note, NoteParams } from '@/api/modules/form'
 import { Grammar, Example } from '@/api/modules/form'
 import { cn } from '@/lib/utils'
 import { NotePointer } from './interfaces'
 import { store } from '@/redux'
 import { message } from 'antd'
+import { Result, ResultData } from '@/api/interface'
 
 const Form = () => {
   const [activeId, setActiveId] = useState<number>(0)
@@ -35,7 +36,7 @@ const Form = () => {
   useEffect(() => {
     // 刷新 formList
     const fetchData = async () => {
-      if(!formListCache[activeId]) {
+      if(!formListCache[activeId] && activeId != 0) {
         const { data } = await getExampleApi({ grammar_id: activeId, user_id: userId })
         if(data) {
           setformListCache((prevCache) => ({ ...prevCache, [activeId]: data}))
@@ -86,28 +87,49 @@ const Form = () => {
     if(notePointer.type === 'Grammar') {
       postParams['grammar_id'] = notePointer.id
     }
-    const res = await postNoteApi(postParams);
-    if(res.code === 200) {
+    let res: ResultData<number> | null = null;
+    if(notePointer.note_id) {
+      // 存在笔记调用编辑接口
+      postParams['id'] = notePointer.note_id
+      res = await putNoteApi(postParams);
+    } else {
+      res = await postNoteApi(postParams);
+    }
+    
+    if(res?.code === 200) {
       message.success('提交笔记成功')
-      if(notePointer.type === 'Sentence') {
-        setformListCache((prevCache) => {
-          const current = prevCache[activeId]
-          current.find(item => item.example_id === notePointer.id)!.note_content = content
-          return { ...prevCache, [activeId]: current }
-        })
-      }
-      if(notePointer.type === 'Grammar') {
-        // setSidebarNavItems((prev) => {
-        //   const current = prev.find(item => item.grammar_id === notePointer.id)!
-        //   return [...prev.filter(item => item.grammar_id !== notePointer.id), { ...current, note_content: content }]
-        // })
-        setSidebarNavItems(sidebarNavItems.map(item => item.grammar_id === notePointer.id ? { ...item, note_content: content } : item))
-      }
+      _updateNoteData({content, note_id: res?.data})
     } else {
       message.error('提交笔记失败')
     }
   }
 
+  const onNoteDelete = async () => {
+    console.log(notePointer.note_id)
+    const res = await deleteNoteApi(notePointer.note_id!)
+    if(res?.code === 200) {
+      message.success('删除笔记成功')
+      _updateNoteData({content: undefined, note_id: undefined})
+      
+    }
+  }
+
+  const _updateNoteData = ({content, note_id}: NotePointer) => {
+    if(notePointer.type === 'Sentence') {
+      setformListCache((prevCache) => {
+        const current = prevCache[activeId]
+        const currentNote = current.find(item => item.example_id === notePointer.id)!
+        currentNote.note_content = content
+        currentNote.note_id = note_id
+        return { ...prevCache, [activeId]: current }
+      })
+      setNotePointer({ ...notePointer, content: content, note_id: note_id })
+    }
+    if(notePointer.type === 'Grammar') {
+      setSidebarNavItems(sidebarNavItems.map(item => item.id === notePointer.id ? { ...item, note_content: content, note_id: note_id } : item))
+      setNotePointer({ ...notePointer, content: content, note_id: note_id })
+    }
+  }
 
   return (
     <>
@@ -130,7 +152,9 @@ const Form = () => {
           <div className={cn("lg:max-w-4xl", noteShow ? "lg:w-2/5" : "lg:w-4/5")}>
             <MainForm 
               activeItem={ sidebarNavItems.find(item => item.id === activeId) } 
-              formList={formListCache[activeId]} 
+              formList={formListCache[activeId]}
+              pointer={notePointer} 
+              noteShow={noteShow} 
               onInputChange={onInputChange} 
               onPriorityChange={onPriorityChange} 
               onStatusChange={onStatusChange}
@@ -139,7 +163,7 @@ const Form = () => {
             />
           </div>
           <div className={cn("lg:w-2/5", noteShow ? "block" : "hidden")}>
-            <NoteEditor onEditorSubmit={onNoteEditorSubmit} pointer={notePointer} />
+            <NoteEditor onNoteDelete={onNoteDelete} onEditorSubmit={onNoteEditorSubmit} pointer={notePointer} />
           </div>
         </div>
       </div>

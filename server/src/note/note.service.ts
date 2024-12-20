@@ -36,4 +36,46 @@ export class NoteService {
       }
     }
   }
+
+  async updateNote(note: NoteDto) {
+    // TODO: add validation
+    const updatedNote = await this.prisma.note.update({
+      where: {
+        id: note.id
+      },
+      data: {
+        content: note.note_content
+      }
+    });
+    if(updatedNote) {
+      return {
+        code: 200,
+        msg: 'Note updated successfully'
+      }
+    } else {
+      return {
+        code: 500,
+        msg: 'Failed to update note'
+      }
+    }
+  }
+
+  async deleteNote(noteId: number) {
+    const deletedNote = await this.prisma.note.delete({
+      where: {
+        id: noteId
+      }
+    });
+    if(deletedNote) {
+      return {
+        code: 200,
+        msg: 'Note deleted successfully'
+      }
+    } else {
+      return {
+        code: 500,
+        msg: 'Failed to delete note'
+      }
+    }
+  }
 }
