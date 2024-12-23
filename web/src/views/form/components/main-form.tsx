@@ -3,9 +3,7 @@ import { Separator } from "@/components/ui/separator"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Grammar, Example, Sentence, putSentenceApi, Note } from "@/api/modules/form"
-import { store } from "@/redux";
-import { message } from 'antd'
+import { Grammar, Example, Sentence, Note, Proficiency } from "@/api/modules/form"
 
 
 import { AttrDropdownRadio } from "./attrDropdownRadio"
@@ -15,15 +13,17 @@ import { NotePointer } from "../interfaces"
 import { cn } from "@/lib/utils"
 
 interface MainFormProps extends React.HTMLAttributes<HTMLElement> {
-  activeItem: (Grammar & Note) | undefined;
+  activeItem: (Grammar & Note & Proficiency) | undefined;
   formList: (Example & Sentence & Note)[];
   pointer: NotePointer;
   noteShow: boolean;
   onInputChange: React.ChangeEventHandler<HTMLInputElement>;
+  onProficiencyChange: (value: string, id: number) => void;
   onPriorityChange: (value: string, id: number) => void;
   onStatusChange: (value: string, id: number) => void;
   onNoteShow: (props: NotePointer) => void;
   onSetPointer: React.Dispatch<React.SetStateAction<NotePointer>>;
+  onFormSubmit: () => void;
 }
 
 export function MainForm({ 
@@ -31,26 +31,19 @@ export function MainForm({
   formList,
   pointer,
   noteShow, 
-  onInputChange, 
+  onInputChange,
+  onProficiencyChange, 
   onPriorityChange, 
   onStatusChange,
   onNoteShow,
-  onSetPointer 
+  onSetPointer,
+  onFormSubmit 
 }: MainFormProps) {
   console.log('main form');
   
   const onSubmit = async () => {
     // TODO: Implement form submission
-    console.log(formList);
-    const userId = store.getState().global.userId;
-    formList.forEach((item) => {
-      item.user_id = userId;
-    })
-    const data = await putSentenceApi(formList);
-    console.log(data);
-    if(data.code === 200) {
-      message.success('提交成功');
-    }
+    
   }
   const onNoteIconCick = (props: NotePointer) => {
     onNoteShow(props);
@@ -66,16 +59,27 @@ export function MainForm({
       <div>
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">{ activeItem?.grammar_point }</h3>
-          <div 
-            className={
-              cn(
-                "flex items-center justify-center border-zinc-400 border border-solid rounded-full h-8 w-8 cursor-pointer",
-                (activeItem?.id === pointer.id && noteShow) ? 'bg-primary text-white' : ''
-              )
+          <div>
+            {
+              activeItem?.proficiency ? 
+              <AttrDropdownRadio 
+                title="Proficiency"
+                value={activeItem?.proficiency!} 
+                onValueChange={(value: string) => onProficiencyChange(value, activeItem?.proficiency_id!)}
+                dropdownMenuItems={priorities}
+              ></AttrDropdownRadio> : <></>
             }
-            onClick={() => onNoteIconCick({ id: activeItem?.id, type: 'Grammar', title: activeItem?.grammar_point, content: activeItem?.note_content, note_id: activeItem?.note_id })}
-          >
-            <NotebookPen className="h-4 w-4" />
+            <div 
+              className={
+                cn(
+                  "flex items-center justify-center border-zinc-400 border border-solid rounded-full h-8 w-8 cursor-pointer",
+                  (activeItem?.id === pointer.id && noteShow) ? 'bg-primary text-white' : ''
+                )
+              }
+              onClick={() => onNoteIconCick({ id: activeItem?.id, type: 'Grammar', title: activeItem?.grammar_point, content: activeItem?.note_content, note_id: activeItem?.note_id })}
+            >
+              <NotebookPen className="h-4 w-4" />
+            </div>
           </div>
         </div>
         <p className="text-sm text-muted-foreground mt-2">
@@ -131,7 +135,7 @@ export function MainForm({
             })
           }
           <div className="flex justify-end space-y-1.5">
-            <Button type='button' onClick={() => onSubmit()}>Submit</Button>
+            <Button type='button' onClick={() => onFormSubmit()}>Submit</Button>
           </div>
         </div>
       </form>

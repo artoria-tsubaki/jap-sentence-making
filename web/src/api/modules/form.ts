@@ -40,6 +40,11 @@ export interface Note {
   grammar_id?: number
   note_content?: string   
 }
+export interface Proficiency {
+  grammar_id: number
+  proficiency_id: number
+  proficiency: string
+}
 
 export interface ExampleParams {
   user_id?: number
@@ -61,7 +66,7 @@ export interface NoteParams {
  */
 // * 获取语法列表接口
 export const getGrammarApi = (params: { level_id: string, limit: number, user_id: number }) => {
-	return http.get<(Grammar & Note)[]>(`/grammar`, params);
+	return http.get<(Grammar & Note & Proficiency)[]>(`/grammar`, params);
 }
 
 // * 获取例句列表接口
@@ -72,6 +77,11 @@ export const getExampleApi = (params: ExampleParams) => {
 // * 提交造句接口
 export const putSentenceApi = (params: Sentence[]) => {
 	return http.put<Sentence>(`/sentence/upset`, params);
+}
+
+// * 提交语法熟练度接口
+export const putProficiencyApi = (params: Proficiency) => {
+	return http.put<Proficiency>(`/proficiency/upset`, params);
 }
 
 // * 创建接口

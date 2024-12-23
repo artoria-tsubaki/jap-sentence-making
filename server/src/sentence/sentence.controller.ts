@@ -1,7 +1,6 @@
 import { Body, Controller, Post, Put } from '@nestjs/common';
 import { SentenceService } from './sentence.service';
-import { Sentence } from '@prisma/client';
-import { Result } from 'src/interface';
+import { Result, Sentence } from 'src/interface';
 
 @Controller('sentence')
 export class SentenceController {

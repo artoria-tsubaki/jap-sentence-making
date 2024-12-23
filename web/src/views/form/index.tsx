@@ -4,7 +4,19 @@ import { MainForm } from './components/main-form'
 import { NoteEditor } from './components/note-editor'
 import { useEffect, useState } from 'react'
 
-import { getGrammarApi, getExampleApi, postNoteApi, putNoteApi, deleteNoteApi, Sentence, Note, NoteParams } from '@/api/modules/form'
+import { 
+  getGrammarApi, 
+  getExampleApi, 
+  putSentenceApi, 
+  postNoteApi, 
+  putNoteApi, 
+  deleteNoteApi, 
+  Sentence, 
+  Note,
+  Proficiency, 
+  NoteParams, 
+  putProficiencyApi
+} from '@/api/modules/form'
 import { Grammar, Example } from '@/api/modules/form'
 import { cn } from '@/lib/utils'
 import { NotePointer } from './interfaces'
@@ -14,7 +26,7 @@ import { Result, ResultData } from '@/api/interface'
 
 const Form = () => {
   const [activeId, setActiveId] = useState<number>(0)
-  const [sidebarNavItems, setSidebarNavItems] = useState<(Grammar & Note)[]>([])
+  const [sidebarNavItems, setSidebarNavItems] = useState<(Grammar & Note & Proficiency)[]>([])
   const [formListCache, setformListCache] = useState<{ [key: number]: (Example & Sentence & Note)[] }>({})
   const [noteShow, setNoteShow] = useState<boolean>(false)
   const [notePointer, setNotePointer] = useState<NotePointer>({})
@@ -56,11 +68,20 @@ const Form = () => {
     })
   }
 
-  const onPriorityChange = (value: string, id:number) => {
+  const onProficiencyChange = (value: string, id:number) => {
     setformListCache((prevCache) => {
       const current = prevCache[activeId]
       current.find(item => item.example_id === Number(id))!.priority = value
       return { ...prevCache, [activeId]: current }
+    })
+  }
+  const onPriorityChange = (value: string, id:number) => {
+    setSidebarNavItems(sidebarNavItems.map(item => item.id === id ? { ...item, proficiency: value } : item))
+    const grammar = sidebarNavItems.find(item => item.id === activeId)!
+    putProficiencyApi({
+      proficiency_id: grammar.proficiency_id,
+      proficiency: value,
+      grammar_id: grammar.grammar_id
     })
   }
   const onStatusChange = (value: string, id:number) => {
@@ -101,6 +122,22 @@ const Form = () => {
       _updateNoteData({content, note_id: res?.data})
     } else {
       message.error('提交笔记失败')
+    }
+  }
+
+  const onFormSubmit = async () => {
+    const userId = store.getState().global.userId;
+    formListCache[activeId].forEach((item) => {
+      item.user_id = userId;
+    })
+    const data = await putSentenceApi(formListCache[activeId]);
+    if(data.code === 200) {
+      message.success('提交成功');
+      // 成功后刷新列表
+      const { data: newList } = await getExampleApi({ grammar_id: activeId, user_id: userId })
+      if(newList) {
+        setformListCache((prevCache) => ({ ...prevCache, [activeId]: newList}))
+      }
     }
   }
 
@@ -156,10 +193,12 @@ const Form = () => {
               pointer={notePointer} 
               noteShow={noteShow} 
               onInputChange={onInputChange} 
+              onProficiencyChange={onProficiencyChange} 
               onPriorityChange={onPriorityChange} 
               onStatusChange={onStatusChange}
               onNoteShow={onNoteShowChange}
               onSetPointer={setNotePointer}
+              onFormSubmit={onFormSubmit}
             />
           </div>
           <div className={cn("lg:w-2/5", noteShow ? "block" : "hidden")}>

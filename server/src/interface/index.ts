@@ -40,3 +40,14 @@ export namespace Login {
 		user_id: number;
 	}
 }
+
+export interface Sentence{
+  sentence_id: number;
+  user_id: number;
+  example_id: number;
+  status: string;
+  priority: string;
+  jap_input: string;
+  created_at: Date;
+  updated_at: Date;
+}

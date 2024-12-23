@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Sentence } from '@prisma/client';
-import { Result } from 'src/interface';
+import { Result, Sentence } from 'src/interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -13,13 +12,19 @@ export class SentenceService {
         if(sentence.status) {
           sentence.status = '2' // 良好
         }
-        if(sentence.id) {
-          return this.prisma.sentence.upsert({
+        console.log(sentence, sentence.sentence_id)
+        if(sentence.sentence_id) {
+          return this.prisma.sentence.update({
             where: {
-              id: sentence.id,
+              id: sentence.sentence_id,
             },
-            update: sentence,
-            create: sentence,
+            data: {
+              user_id: sentence.user_id,
+              example_id: sentence.example_id,
+              jap_input: sentence.jap_input,
+              status: sentence.status,
+              priority: sentence.priority
+            }
           })
         } else {
           return this.prisma.sentence.create({

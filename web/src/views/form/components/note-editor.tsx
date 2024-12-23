@@ -66,13 +66,16 @@ export function NoteEditor ({ onNoteDelete, onEditorSubmit, pointer }: NoteEdito
           <div className="text-zinc-300 truncate" title={pointer.title}>{pointer.title}</div>
         </div>
       </div>
-      <div className='flex justify-between mt-4 align-center'>
-        <div 
-          className='text-red-500 cursor-pointer py-2'
-          onClick={()=>{onNoteDelete()}}
-        >Delete Note</div>
+      <div className='flex justify-center mt-4 align-center relative'>
+        {
+          pointer.note_id ? 
+          <div 
+            className='text-red-500 cursor-pointer py-2 absolute top-1/2 -translate-y-1/2 left-2'
+            onClick={()=>{onNoteDelete()}}
+          >Delete Note</div> :
+          <></>
+        }
         <Button onClick={() => {onEditorSubmit(html)}}>Submit Note</Button>
-        <span></span>
       </div>
     </>
   )
