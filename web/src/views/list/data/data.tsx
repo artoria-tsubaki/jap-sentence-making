@@ -7,6 +7,9 @@ import {
   CircleOff,
   HelpCircle,
   BadgeCheck,
+  Smile,
+  Annoyed,
+  Angry
 } from "lucide-react"
 
 export const labels = [
@@ -79,5 +82,23 @@ export const priorities = [
     label: "高",
     value: "2",
     icon: ArrowUp,
+  },
+]
+
+export const proficiencies = [
+  {
+    label: "会认会写",
+    value: "0",
+    icon: Smile,
+  },
+  {
+    label: "会认不会写",
+    value: "1",
+    icon: Annoyed,
+  },
+  {
+    label: "不会认",
+    value: "2",
+    icon: Angry,
   },
 ]

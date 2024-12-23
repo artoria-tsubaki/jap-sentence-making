@@ -6,7 +6,7 @@ import { CreateProficiencyDto } from './dto/create-proficiency.dto';
 export class ProficiencyController {
   constructor(private readonly proficiencyService: ProficiencyService) {}
 
-  @Post()
+  @Post('upset')
   upset(@Body() createProficiencyDto: CreateProficiencyDto) {
     return this.proficiencyService.upset(createProficiencyDto);
   }

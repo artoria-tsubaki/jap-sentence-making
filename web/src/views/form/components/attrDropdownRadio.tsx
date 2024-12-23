@@ -7,15 +7,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { cn } from "@/lib/utils";
 
 interface attrDropdownRadioProps extends React.HTMLAttributes<HTMLElement> {
   title: string;
   value: string;
   onValueChange: (value: string) => void;
   dropdownMenuItems: { label: string; value: string, icon: React.ComponentType<{ className?: string }> }[];
+  ClassName?: string;
 }
 
-export function AttrDropdownRadio({ title, value, onValueChange, dropdownMenuItems }: attrDropdownRadioProps) {
+export function AttrDropdownRadio({ title, value, onValueChange, dropdownMenuItems, ClassName }: attrDropdownRadioProps) {
 
   const formItem = dropdownMenuItems.find(item => item.value === value)!
 
@@ -26,7 +28,7 @@ export function AttrDropdownRadio({ title, value, onValueChange, dropdownMenuIte
           className={"cursor-pointer"}
         >
           {
-            formItem.icon && <formItem.icon className="h-4 w-4" />
+            formItem.icon && <formItem.icon className={cn(ClassName ? ClassName :"h-4 w-4" )}/>
           }
         </div>
       </DropdownMenuTrigger>

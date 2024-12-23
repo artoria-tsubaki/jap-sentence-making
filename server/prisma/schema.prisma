@@ -76,6 +76,7 @@ model Sentence {
 model Proficiency {
   id          Int    @id @default(autoincrement())
   grammar_id  Int
+  user_id     Int
   proficiency String? @db.VarChar(5)
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now())

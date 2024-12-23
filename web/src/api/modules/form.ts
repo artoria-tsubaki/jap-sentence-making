@@ -1,5 +1,4 @@
 import http from "@/api";
-import { Result, ResultData } from "../interface";
 
 export interface Grammar {
   id: number
@@ -41,8 +40,16 @@ export interface Note {
   note_content?: string   
 }
 export interface Proficiency {
+  user_id: number
   grammar_id: number
   proficiency_id: number
+  proficiency: string
+}
+
+export interface ProficiencyParams {
+  id?: number
+  user_id: number
+  grammar_id: number
   proficiency: string
 }
 
@@ -80,8 +87,8 @@ export const putSentenceApi = (params: Sentence[]) => {
 }
 
 // * 提交语法熟练度接口
-export const putProficiencyApi = (params: Proficiency) => {
-	return http.put<Proficiency>(`/proficiency/upset`, params);
+export const putProficiencyApi = (params: ProficiencyParams) => {
+	return http.post<Proficiency>(`/proficiency/upset`, params);
 }
 
 // * 创建接口

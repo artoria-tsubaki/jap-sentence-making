@@ -15,14 +15,15 @@ import {
   Note,
   Proficiency, 
   NoteParams, 
-  putProficiencyApi
+  putProficiencyApi,
+  ProficiencyParams
 } from '@/api/modules/form'
 import { Grammar, Example } from '@/api/modules/form'
 import { cn } from '@/lib/utils'
 import { NotePointer } from './interfaces'
 import { store } from '@/redux'
 import { message } from 'antd'
-import { Result, ResultData } from '@/api/interface'
+import { ResultData } from '@/api/interface'
 
 const Form = () => {
   const [activeId, setActiveId] = useState<number>(0)
@@ -68,21 +69,26 @@ const Form = () => {
     })
   }
 
-  const onProficiencyChange = (value: string, id:number) => {
+  const onPriorityChange = (value: string, id:number) => {
     setformListCache((prevCache) => {
       const current = prevCache[activeId]
       current.find(item => item.example_id === Number(id))!.priority = value
       return { ...prevCache, [activeId]: current }
     })
   }
-  const onPriorityChange = (value: string, id:number) => {
-    setSidebarNavItems(sidebarNavItems.map(item => item.id === id ? { ...item, proficiency: value } : item))
+  const onProficiencyChange = async (value: string, id:number) => {
     const grammar = sidebarNavItems.find(item => item.id === activeId)!
-    putProficiencyApi({
-      proficiency_id: grammar.proficiency_id,
+    const params: ProficiencyParams = {
+      user_id: userId,
       proficiency: value,
-      grammar_id: grammar.grammar_id
-    })
+      grammar_id: grammar.id
+    }
+    if(grammar.proficiency_id) {
+      params.id = grammar.proficiency_id
+    }
+    const { data } = await putProficiencyApi(params)
+    setSidebarNavItems(sidebarNavItems.map(item => item.id === id ? { ...item, ...{ proficiency_id: data!.proficiency_id, proficiency: data!.proficiency } } : item))
+    console.log(id, sidebarNavItems)
   }
   const onStatusChange = (value: string, id:number) => {
     setformListCache((prevCache) => {
