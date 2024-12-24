@@ -54,29 +54,29 @@ export function MainForm({
       <div>
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">{ activeItem?.grammar_point }</h3>
-            {
-              activeItem?.proficiency_id ?
-              <div className="flex items-center space-x-2"> 
+            <div className="flex items-center space-x-2"> 
+              {
+                activeItem ? 
                 <AttrDropdownRadio 
                   title="Proficiency"
                   value={activeItem?.proficiency} 
                   onValueChange={(value: string) => onProficiencyChange(value, activeItem?.id)}
                   dropdownMenuItems={proficiencies}
-                  ClassName={"h-8 w-8"}
-                ></AttrDropdownRadio>
-              <div 
-                className={
-                  cn(
-                    "flex items-center justify-center border-zinc-400 border border-solid rounded-full h-8 w-8 cursor-pointer",
-                    (activeItem?.id === pointer.id && noteShow) ? 'bg-primary text-white' : ''
-                  )
-                }
-                onClick={() => onNoteIconCick({ id: activeItem?.id, type: 'Grammar', title: activeItem?.grammar_point, content: activeItem?.note_content, note_id: activeItem?.note_id })}
-                >
-                <NotebookPen className="h-4 w-4" />
-              </div>
-            </div> : <></>
-          }
+                  ClassName={"h-6 w-6"}
+                ></AttrDropdownRadio> : <></>
+              }
+            <div 
+              className={
+                cn(
+                  "flex items-center justify-center border-zinc-400 border border-solid rounded-full h-8 w-8 cursor-pointer",
+                  (activeItem?.id === pointer.id && noteShow) ? 'bg-primary text-white' : ''
+                )
+              }
+              onClick={() => onNoteIconCick({ id: activeItem?.id, type: 'Grammar', title: activeItem?.grammar_point, content: activeItem?.note_content, note_id: activeItem?.note_id })}
+              >
+              <NotebookPen className="h-4 w-4" />
+            </div>
+          </div>
         </div>
         <p className="text-sm text-muted-foreground mt-2">
           { activeItem?.explanation }

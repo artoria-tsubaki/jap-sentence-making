@@ -12,4 +12,8 @@ export class GrammarDto {
   @IsString()
   @IsOptional()
   limit?: string;
+
+  @IsString()
+  @IsOptional()
+  proficiency?: string;
 }

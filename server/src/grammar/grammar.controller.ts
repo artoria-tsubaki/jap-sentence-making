@@ -13,8 +13,9 @@ export class GrammarController {
   async findGrammar(
     @Query('level_id') level_id: string,
     @Query('limit') limit: string,
-    @Query('user_id') user_id: string
+    @Query('user_id') user_id: string,
+    @Query('proficiency') proficiency: string
   ): Promise<ResultData<Grammar[]>> {
-    return this.grammarService.findGrammar({ level_id, limit, user_id: Number(user_id) });
+    return this.grammarService.findGrammar({ level_id, limit, user_id: Number(user_id), proficiency });
   }
 }
