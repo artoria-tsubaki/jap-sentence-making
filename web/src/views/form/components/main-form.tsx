@@ -92,7 +92,7 @@ export function MainForm({
                   <Label htmlFor="name">{ (formIndex + 1) + '. ' + formItem.chinese_translation }</Label>
                   <Input value={formItem.jap_input} onChange={onInputChange} id={ String(formItem.example_id) } placeholder="" />
                   {
-                    formItem.sentence_id && (
+                    (formItem.sentence_id && formItem.jap_input) && (
                       <>
                         <div className="flex align-center justify-between">
                           <span className="text-sm">Reference Sentence: <span className="text-red-500">{ formItem.japanese_sentence }</span></span>

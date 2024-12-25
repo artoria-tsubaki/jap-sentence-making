@@ -36,7 +36,7 @@ const Form = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await getGrammarApi({ level_id: '6', limit: 5, user_id: userId, proficiency: '1,2' })
+      const { data } = await getGrammarApi({ level_id: '1,2,3,4,5,6', limit: 5, user_id: userId, proficiency: '1,2' })
       if(data) {
         setSidebarNavItems(data)
         setActiveId(data[0].id)

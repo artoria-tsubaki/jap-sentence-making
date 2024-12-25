@@ -14,7 +14,7 @@ export class GrammarService {
       FROM grammar g
       LEFT JOIN note n ON g.id = n.grammar_id
       LEFT JOIN proficiency p on g.id = p.grammar_id
-    `
+      `
     if (user_id) {
       SQL += ` WHERE (n.user_id is null or n.user_id = ${user_id})`
     }
@@ -23,8 +23,10 @@ export class GrammarService {
       SQL += ` AND (p.proficiency is null or p.proficiency in (${proficiency}))`
     }
     if (level_id) {
-      SQL += ` AND g.level_id = ${level_id}`
+      // 可以传多个level_id，用逗号分隔
+      SQL += ` AND g.level_id in (${level_id})`
     }
+    SQL += ` ORDER BY RAND()`
     if (limit) {
       SQL += ` LIMIT ${limit}`
     }
