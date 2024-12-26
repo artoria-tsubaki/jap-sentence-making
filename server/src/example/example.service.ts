@@ -16,7 +16,8 @@ export class ExampleService {
       e.id as example_id, e.grammar_id , e.japanese_sentence, e.chinese_translation, e.english_translation, 
       s.id as sentence_id, s.status, s.priority, s.jap_input, 
       l.level_name,
-      n.id as note_id, n.content as note_content
+      n.id as note_id, n.content as note_content,
+      g.grammar_point, g.explanation, g.href, g.meaning, g.connection, g.initial
       FROM example e
       LEFT JOIN sentence s ON e.id = s.example_id
       LEFT JOIN note n ON e.id = n.example_id

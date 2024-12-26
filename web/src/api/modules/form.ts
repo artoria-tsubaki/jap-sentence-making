@@ -78,7 +78,7 @@ export const getGrammarApi = (params: { level_id: string, limit: number, user_id
 
 // * 获取例句列表接口
 export const getExampleApi = (params: ExampleParams) => {
-	return http.get<(Example & Sentence & Note)[]>(`/example/findExample`, params);
+	return http.get<(Example & Sentence & Note & Grammar)[]>(`/example/findExample`, params);
 }
 
 // * 提交造句接口

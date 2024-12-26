@@ -5,10 +5,10 @@ import { columns } from "./components/columns"
 import { DataTable } from "./components/data-table"
 import { taskSchema } from "./data/schema"
 
-import { Example, getExampleApi, Sentence } from "@/api/modules/form"
+import { Example, getExampleApi, Grammar, Sentence } from "@/api/modules/form"
 
 const List = () => {
-  const [tasks, setTasks] = useState<(Example & Sentence)[]>([])
+  const [tasks, setTasks] = useState<(Example & Sentence & Grammar)[]>([])
   const fetchData = async () => {
     const { data } = await getExampleApi({})
     if(data) {
