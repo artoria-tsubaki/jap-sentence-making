@@ -102,3 +102,24 @@ export const proficiencies = [
     icon: Angry,
   },
 ]
+
+export interface RowDataType {
+  example_id: number,
+  grammar_id: number,
+  japanese_sentence: string,
+  chinese_translation: string,
+  english_translation: string,
+  sentence_id: number,
+  status: string,
+  priority: string,
+  jap_input: string,
+  level_name: string,
+  note_id: number,
+  note_content: string,
+  grammar_point: string,
+  explanation: string,
+  href: string,
+  meaning: string,
+  connection: string,
+  initial: string
+}

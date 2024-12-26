@@ -3,9 +3,8 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Badge } from "../../../components/ui/badge"
-import { Checkbox } from "@/components/ui/checkbox"
 
-import { labels, priorities, statuses } from "../data/data"
+import { priorities, statuses } from "../data/data"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
 import { Example, Sentence } from "@/api/modules/form"
@@ -50,6 +49,21 @@ export const columns: ColumnDef<Example & Sentence>[] = [
       <DataTableColumnHeader column={column} title="Level" />
     ),
     cell: ({ row }) => <div className="w-[80px]"><Badge variant="outline">{row.getValue("level_name")}</Badge></div>,
+  },
+  {
+    accessorKey: "grammar_point",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Grammar" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[100px] truncate font-medium">
+            {row.getValue("grammar_point")}
+          </span>
+        </div>
+      )
+    },
   },
   {
     accessorKey: "japanese_sentence",

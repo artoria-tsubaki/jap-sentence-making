@@ -8,21 +8,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
 import { RowDetail } from "./row-detail"
-
-import { labels } from "../data/data"
-import { taskSchema } from "../data/schema"
 import { useState } from "react"
+
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -69,10 +61,10 @@ export function DataTableRowActions<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuItem>Edit</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
+          <DropdownMenuItem>Note</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <RowDetail<TData> isModalOpen={isModalOpen} handleCancel={() => setIsModalOpen(false)} row={row}></RowDetail>
+      <RowDetail isModalOpen={isModalOpen} handleCancel={() => setIsModalOpen(false)} row={row}></RowDetail>
     </>
   )
 }
