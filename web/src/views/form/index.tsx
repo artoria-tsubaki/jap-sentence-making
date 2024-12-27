@@ -1,7 +1,7 @@
 import { Separator } from '@/components/ui/separator'
 import { SidebarNav } from './components/sidebar-nav'
 import { MainForm } from './components/main-form'
-import { NoteEditor } from './components/note-editor'
+import { NoteEditor } from '@/components/NoteEditor'
 import { useEffect, useState } from 'react'
 
 import { 

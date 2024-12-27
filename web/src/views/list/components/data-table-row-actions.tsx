@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { RowDetail } from "./row-detail"
+import { RowNote } from "./row-note"
 import { useState } from "react"
 
 
@@ -25,11 +26,15 @@ export function DataTableRowActions<TData>({
 }: DataTableRowActionsProps<TData>) {
   const rowData = row.original
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
+  const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
 
   const onShowDetail = () => {
     console.log(rowData)
-    setIsModalOpen(true)
+    setIsDetailModalOpen(true)
+  }
+  const onShowNote = () => {
+    setIsNoteModalOpen(true)
   }
 
   return (
@@ -61,10 +66,11 @@ export function DataTableRowActions<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuItem>Edit</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Note</DropdownMenuItem>
+          <DropdownMenuItem onClick={onShowNote}>Note</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <RowDetail isModalOpen={isModalOpen} handleCancel={() => setIsModalOpen(false)} row={row}></RowDetail>
+      <RowDetail isModalOpen={isDetailModalOpen} handleCancel={() => setIsDetailModalOpen(false)} row={row}></RowDetail>
+      <RowNote isModalOpen={isNoteModalOpen} handleCancel={() => setIsNoteModalOpen(false)} row={row}></RowNote>
     </>
   )
 }

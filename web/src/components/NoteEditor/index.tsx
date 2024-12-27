@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Editor, Toolbar } from '@wangeditor/editor-for-react'
 import { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor'
 import { Button } from '@/components/ui/button'
-import { NotePointer } from '../interfaces'
+import { NotePointer } from '../../views/form/interfaces'
 
 interface NoteEditorProps extends React.HTMLAttributes<HTMLDivElement>{
   onNoteDelete: () => Promise<void>;

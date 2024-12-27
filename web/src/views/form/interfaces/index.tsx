@@ -1,6 +1,6 @@
 export interface NotePointer {
   id?: number;
-  type?: string;
+  type?: 'Sentence' | 'Grammar';
   title?: string;
   content?: string;
   note_id?: number;
