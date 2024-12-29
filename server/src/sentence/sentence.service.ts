@@ -9,7 +9,7 @@ export class SentenceService {
   async upsetSentence(sentences: Sentence[]): Promise<Result> {
     const result = await Promise.all(
       sentences.map((sentence) => {
-        if(sentence.status) {
+        if(!sentence.status) {
           sentence.status = '2' // 良好
         }
         console.log(sentence, sentence.sentence_id)

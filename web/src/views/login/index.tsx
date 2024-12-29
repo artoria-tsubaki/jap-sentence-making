@@ -30,6 +30,16 @@ const login = (props: any) => {
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(event.target.value);
   };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // 防止表单默认提交
+      if(pageType === "login"){
+        onLogIn();
+      }else{
+        onSignUp();
+      }
+    }
+  }
 
   const onLogIn = async () => {
     // TODO: Implement login
@@ -69,7 +79,13 @@ const login = (props: any) => {
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" value={passwordValue} onChange={handlePasswordChange} placeholder="please input your password" />
+                <Input 
+                  id="password" 
+                  type="password" 
+                  value={passwordValue} 
+                  onChange={handlePasswordChange}
+                  onKeyDown={handleKeyDown} // 监听键盘事件 
+                  placeholder="please input your password" />
               </div>
             </div>
           </form>

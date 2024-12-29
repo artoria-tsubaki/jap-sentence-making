@@ -94,7 +94,7 @@ export function MainForm({
                   {
                     (formItem.sentence_id && formItem.jap_input) && (
                       <>
-                        <div className="flex align-center justify-between">
+                        <div className="flex items-center justify-between">
                           <span className="text-sm">Reference Sentence: <span className="text-red-500">{ formItem.japanese_sentence }</span></span>
                             <div className="flex gap-1.5">
                               <AttrDropdownRadio 

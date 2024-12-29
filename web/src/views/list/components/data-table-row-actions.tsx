@@ -1,6 +1,6 @@
 "use client"
 
-import { Row } from "@tanstack/react-table"
+import { Row, Table } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -14,20 +14,24 @@ import {
 
 import { RowDetail } from "./row-detail"
 import { RowNote } from "./row-note"
+import { RowEdit } from "./row-edit"
 import { useState } from "react"
 
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
+  table: Table<TData>
 }
 
 export function DataTableRowActions<TData>({
   row,
+  table
 }: DataTableRowActionsProps<TData>) {
   const rowData = row.original
 
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
   const onShowDetail = () => {
     console.log(rowData)
@@ -35,6 +39,9 @@ export function DataTableRowActions<TData>({
   }
   const onShowNote = () => {
     setIsNoteModalOpen(true)
+  }
+  const onShowEdit = () => {
+    setIsEditModalOpen(true)
   }
 
   return (
@@ -64,12 +71,13 @@ export function DataTableRowActions<TData>({
           </DropdownMenuSub> */}
           <DropdownMenuItem onClick={onShowDetail}>View Detail</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem onClick={onShowEdit}>Edit</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={onShowNote}>Note</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <RowDetail isModalOpen={isDetailModalOpen} handleCancel={() => setIsDetailModalOpen(false)} row={row}></RowDetail>
+      <RowEdit isModalOpen={isEditModalOpen} handleCancel={() => setIsEditModalOpen(false)} row={row} table={table}></RowEdit>
       <RowNote isModalOpen={isNoteModalOpen} handleCancel={() => setIsNoteModalOpen(false)} row={row}></RowNote>
     </>
   )

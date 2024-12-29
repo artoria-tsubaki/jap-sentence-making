@@ -66,7 +66,7 @@ export function NoteEditor ({ onNoteDelete, onEditorSubmit, pointer }: NoteEdito
           <div className="text-zinc-300 truncate" title={pointer.title}>{pointer.title}</div>
         </div>
       </div>
-      <div className='flex justify-center mt-4 align-center relative'>
+      <div className='flex justify-center mt-4 items-center relative'>
         {
           pointer.note_id ? 
           <div 

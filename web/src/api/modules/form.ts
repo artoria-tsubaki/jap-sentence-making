@@ -24,7 +24,7 @@ export interface Example {
 }
 
 export interface Sentence {
-  sentence_id: number
+  sentence_id?: number
   user_id: number
   example_id: number
   status: string

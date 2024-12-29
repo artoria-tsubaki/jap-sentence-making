@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react"
-import { z } from "zod"
 
 import { columns } from "./components/columns"
 import { DataTable } from "./components/data-table"
-import { taskSchema } from "./data/schema"
 
 import { Example, getExampleApi, Grammar, Sentence } from "@/api/modules/form"
 
 const List = () => {
-  const [tasks, setTasks] = useState<(Example & Sentence & Grammar)[]>([])
+  const [data, setData] = useState<(Example & Sentence & Grammar)[]>([])
   const fetchData = async () => {
     const { data } = await getExampleApi({})
     if(data) {
-      setTasks(data)
-      console.log(data);
+      setData(data)
     }
   }
   useEffect(() => {
@@ -27,11 +24,11 @@ const List = () => {
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
             <p className="text-muted-foreground">
-              Here&apos;s a list of your tasks for this month!
+              Here&apos;s a list of your data for this month!
             </p>
           </div>
         </div>
-        <DataTable data={tasks} columns={columns} />
+        <DataTable setData={setData} data={data} columns={columns} />
       </div>
     </>
   )

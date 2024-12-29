@@ -17,7 +17,7 @@ interface RowNoteProps<TData> {
 export function RowNote<TData> ({ row, isModalOpen, handleCancel }: RowNoteProps<TData>) {
   const rowData = row.original as RowDataType;
   const [notePointer, setNotePointer] = useState<NotePointer>({
-    id: rowData.sentence_id,
+    id: rowData.example_id,
     type: 'Sentence',
     title: rowData.japanese_sentence,
     content: rowData.note_content,
@@ -30,6 +30,7 @@ export function RowNote<TData> ({ row, isModalOpen, handleCancel }: RowNoteProps
     if(res?.code === 200) {
       message.success('删除笔记成功')
       setNotePointer({ ...notePointer, content: undefined, note_id: undefined })
+      rowData.note_content = undefined
     }
   }
 
@@ -57,6 +58,8 @@ export function RowNote<TData> ({ row, isModalOpen, handleCancel }: RowNoteProps
     if(res?.code === 200) {
       message.success('提交笔记成功')
       setNotePointer({ ...notePointer, content: content, note_id: res?.data })
+      rowData.note_content = content
+      rowData.note_id = res?.data
     } else {
       message.error('提交笔记失败')
     }

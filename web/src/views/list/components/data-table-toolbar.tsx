@@ -44,11 +44,12 @@ export function DataTableToolbar<TData>({
           <SelectContent>
             <SelectItem value="japanese_sentence">Japanese Sentence</SelectItem>
             <SelectItem value="chinese_translation">Chinese Sentence</SelectItem>
-            <SelectItem value="jap_input">Your Input</SelectItem>
+            <SelectItem value="jap_input">Your Sentence</SelectItem>
+            <SelectItem value="grammar_point">Grammar</SelectItem>
           </SelectContent>
         </Select>
         <Input
-          placeholder="Filter Sentence..."
+          placeholder="Filter ..."
           value={(table.getColumn(filterField)?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn(filterField)?.setFilterValue(event.target.value)

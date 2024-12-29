@@ -32,7 +32,7 @@ export function AttrDropdownRadio({ title, value, onValueChange, dropdownMenuIte
           }
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-28">
+      <DropdownMenuContent className="w-28 z-[10019991]">
         <DropdownMenuLabel>{ title }</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={value} onValueChange={onValueChange}>

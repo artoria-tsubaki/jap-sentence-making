@@ -74,7 +74,7 @@ export const columns: ColumnDef<Example & Sentence>[] = [
 
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
+          <span className="max-w-[500px] truncate font-medium bg-black">
             {row.getValue("japanese_sentence")}
           </span>
         </div>
@@ -100,7 +100,7 @@ export const columns: ColumnDef<Example & Sentence>[] = [
   {
     accessorKey: "jap_input",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Your Input" />
+      <DataTableColumnHeader column={column} title="Your Sentence" />
     ),
     cell: ({ row }) => {
 
@@ -169,6 +169,6 @@ export const columns: ColumnDef<Example & Sentence>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row, table }) => <DataTableRowActions row={row} table={table} />,
   },
 ]

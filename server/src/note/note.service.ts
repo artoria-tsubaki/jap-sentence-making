@@ -50,6 +50,7 @@ export class NoteService {
     if(updatedNote) {
       return {
         code: 200,
+        data: note.id,
         msg: 'Note updated successfully'
       }
     } else {

@@ -27,15 +27,18 @@ import {
 
 import { DataTablePagination } from "./data-table-pagination"
 import { DataTableToolbar } from "./data-table-toolbar"
+import { Example, Grammar, Sentence } from "@/api/modules/form"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
+  setData: React.Dispatch<React.SetStateAction<(Example & Sentence & Grammar)[]>>
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  setData
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
@@ -53,6 +56,21 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       rowSelection,
       columnFilters,
+    },
+    meta: {
+      updateData: (rowIndex: number, columnId: string, value: TValue) => {
+        setData(old =>
+          old.map((row, index) => {
+            if (index === rowIndex) {
+              return {
+                ...old[rowIndex]!,
+                [columnId]: value,
+              }
+            }
+            return row
+          })
+        )
+      },
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
