@@ -10,6 +10,11 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu"
 
 import { RowDetail } from "./row-detail"
@@ -32,12 +37,14 @@ export function DataTableRowActions<TData>({
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [noteType, setNoteType] = useState<"Grammar" | "Sentence">("Sentence")
 
   const onShowDetail = () => {
     console.log(rowData)
     setIsDetailModalOpen(true)
   }
-  const onShowNote = () => {
+  const onShowNote = (type: "Grammar" | "Sentence") => {
+    setNoteType(type);
     setIsNoteModalOpen(true)
   }
   const onShowEdit = () => {
@@ -57,28 +64,25 @@ export function DataTableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          {/* <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup value={task.label}>
-                {labels.map((label) => (
-                  <DropdownMenuRadioItem key={label.value} value={label.value}>
-                    {label.label}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuSubContent>
-          </DropdownMenuSub> */}
           <DropdownMenuItem onClick={onShowDetail}>View Detail</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={onShowEdit}>Edit</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={onShowNote}>Note</DropdownMenuItem>
+          {/* <DropdownMenuItem onClick={onShowNote}>Note</DropdownMenuItem> */}
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Note</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup>
+                  <DropdownMenuRadioItem value={""} onClick={() => onShowNote("Grammar")}>Grammar</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value={""} onClick={() => onShowNote("Sentence")}>Sentence</DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
         </DropdownMenuContent>
       </DropdownMenu>
       <RowDetail isModalOpen={isDetailModalOpen} handleCancel={() => setIsDetailModalOpen(false)} row={row}></RowDetail>
       <RowEdit isModalOpen={isEditModalOpen} handleCancel={() => setIsEditModalOpen(false)} row={row} table={table}></RowEdit>
-      <RowNote isModalOpen={isNoteModalOpen} handleCancel={() => setIsNoteModalOpen(false)} row={row}></RowNote>
+      <RowNote isModalOpen={isNoteModalOpen} handleCancel={() => setIsNoteModalOpen(false)} row={row} noteType={noteType}></RowNote>
     </>
   )
 }
