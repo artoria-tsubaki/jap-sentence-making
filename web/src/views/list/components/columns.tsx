@@ -74,7 +74,7 @@ export const columns: ColumnDef<Example & Sentence>[] = [
 
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium bg-black">
+          <span className="max-w-[400px] truncate font-medium bg-black">
             {row.getValue("japanese_sentence")}
           </span>
         </div>
@@ -90,7 +90,7 @@ export const columns: ColumnDef<Example & Sentence>[] = [
 
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
+          <span className="max-w-[400px] truncate font-medium">
             {row.getValue("chinese_translation")}
           </span>
         </div>
@@ -106,7 +106,7 @@ export const columns: ColumnDef<Example & Sentence>[] = [
 
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
+          <span className="max-w-[200px] truncate font-medium">
             {row.getValue("jap_input")}
           </span>
         </div>
