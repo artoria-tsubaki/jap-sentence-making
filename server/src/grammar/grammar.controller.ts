@@ -3,6 +3,7 @@ import { GrammarService } from './grammar.service';
 import { Grammar } from '@prisma/client';
 import { ResultData } from '../interface';
 import { AuthGuard } from '../auth/auth.guard';
+import { GrammarDto } from './dto/grammar.dto';
 
 @Controller('grammar')
 export class GrammarController {
@@ -17,5 +18,10 @@ export class GrammarController {
     @Query('proficiency') proficiency: string
   ): Promise<ResultData<Grammar[]>> {
     return this.grammarService.findGrammar({ level_id, limit, user_id: Number(user_id), proficiency });
+  }
+
+  @Get('cached')
+  async findGrammarWithCache(@Query() query: GrammarDto) {
+    return this.grammarService.findGrammarWithCache(query);
   }
 }

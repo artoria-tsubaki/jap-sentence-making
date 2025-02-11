@@ -13,6 +13,8 @@ export class AuthService {
 
   async signIn(username: string, password: string): Promise<ResultData<Login.ResLogin>> {
     const user = await this.userService.findByUsername(username);
+    console.log(user);
+    
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }

@@ -43,7 +43,7 @@ const login = (props: any) => {
 
   const onLogIn = async () => {
     // TODO: Implement login
-    const { data } = await loginApi({ username: usernameValue, password: passwordValue })
+    const { data } = await loginApi({ username: usernameValue, password: btoa(passwordValue) })
     console.log(data);
     setToken(data?.accessToken);
     setUserId(data?.user_id);
@@ -54,7 +54,7 @@ const login = (props: any) => {
   }
   const onSignUp = async () => {
     // TODO: Implement signup
-    const { code } = await registerApi({ username: usernameValue, password: passwordValue });
+    const { code } = await registerApi({ username: usernameValue, password: btoa(passwordValue) });
     if (code === 200) {
       message.success("注册成功");
       setPageType("login");
