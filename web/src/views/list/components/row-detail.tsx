@@ -13,7 +13,6 @@ interface DeitalProps<TData> {
 
 export function RowDetail<TData>({ row,  isModalOpen, handleCancel }: DeitalProps<TData>) {
   const rowData = row.original as RowDataType
-  console.log(rowData)
   // TODO: Implement row detail
   const items:DescriptionsProps['items'] = [
     {

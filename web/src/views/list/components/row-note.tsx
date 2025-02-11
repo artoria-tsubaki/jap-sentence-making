@@ -2,7 +2,7 @@ import { message, Modal } from "antd";
 import { NoteEditor } from '@/components/NoteEditor'
 import { Row } from "@tanstack/react-table"
 import { RowDataType } from "../data/data"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NotePointer } from "@/views/form/interfaces";
 import { deleteNoteApi, NoteParams, postNoteApi, putNoteApi } from "@/api/modules/form";
 import { ResultData } from "@/api/interface";
@@ -12,18 +12,31 @@ interface RowNoteProps<TData> {
   row: Row<TData>;
   isModalOpen: boolean;
   handleCancel: () => void;
+  noteType: "Grammar" | "Sentence";
 }
 
-export function RowNote<TData> ({ row, isModalOpen, handleCancel }: RowNoteProps<TData>) {
+export function RowNote<TData> ({ row, isModalOpen, handleCancel, noteType }: RowNoteProps<TData>) {
   const rowData = row.original as RowDataType;
   const [notePointer, setNotePointer] = useState<NotePointer>({
-    id: rowData.example_id,
-    type: 'Sentence',
-    title: rowData.japanese_sentence,
+    id: noteType === 'Sentence' ? rowData.example_id : rowData.grammar_id,
+    type: noteType,
+    title: noteType === 'Sentence' ? rowData.japanese_sentence : rowData.grammar_point,
     content: rowData.note_content,
     note_id: rowData.note_id
   })
   const userId = store.getState().global.userId;
+
+  useEffect(() => {
+    if(isModalOpen === true) {
+      setNotePointer({
+        id: noteType === 'Sentence' ? rowData.example_id : rowData.grammar_id,
+        type: noteType,
+        title: noteType === 'Sentence' ? rowData.japanese_sentence : rowData.grammar_point,
+        content: rowData.note_content,
+        note_id: rowData.note_id
+      })
+    }
+  }, [isModalOpen])
 
   const onNoteDelete = async () => {
     const res = await deleteNoteApi(notePointer.note_id!)
@@ -31,6 +44,7 @@ export function RowNote<TData> ({ row, isModalOpen, handleCancel }: RowNoteProps
       message.success('删除笔记成功')
       setNotePointer({ ...notePointer, content: undefined, note_id: undefined })
       rowData.note_content = undefined
+      rowData.note_id = undefined
     }
   }
 
