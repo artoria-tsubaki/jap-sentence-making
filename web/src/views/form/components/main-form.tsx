@@ -4,13 +4,26 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Grammar, Example, Sentence, Note, Proficiency } from "@/api/modules/form"
-
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { Loader2, BotMessageSquare, Copy, Check, NotebookPen } from "lucide-react"
+import { useState } from "react"
 
 import { AttrDropdownRadio } from "./attrDropdownRadio"
 import { priorities, statuses, proficiencies } from "@/views/list/data/data"
-import { NotebookPen } from "lucide-react"
 import { NotePointer } from "../interfaces"
 import { cn } from "@/lib/utils"
+import getCozeApi from "@/api/helper/cozeApi"
 
 interface MainFormProps extends React.HTMLAttributes<HTMLElement> {
   activeItem: (Grammar & Note & Proficiency) | undefined;
@@ -49,8 +62,48 @@ export function MainForm({
     })
   }
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [cozeResult, setCozeResult] = useState<string>("");
+  const [currentSentence, setCurrentSentence] = useState<string>("");
+  const [copied, setCopied] = useState(false);
+
+  const handleCozeClick = async (e: React.MouseEvent, formItem: Example & Sentence & Note) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    setIsDialogOpen(true);
+    setIsLoading(true);
+    setCurrentSentence(formItem.jap_input);
+    
+    try {
+      const res = await getCozeApi(
+        formItem.jap_input, 
+        formItem.chinese_translation, 
+        activeItem!.grammar_point
+      );
+      setCozeResult(JSON.parse(res.data).data.replace(/\n/g, '<br/>'));
+    } catch (error) {
+      console.log(error);
+      setCozeResult("Failed to get response");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const handleCopy = async () => {
+    const plainText = cozeResult.replace(/<br\/>/g, '\n').replace(/<[^>]+>/g, '');
+    await navigator.clipboard.writeText(plainText);
+    setCopied(true);
+    
+    setTimeout(() => {
+      setCopied(false);
+    }, 1500);
+  };
+
   return (
     <div className="space-y-6">
+
       <div>
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">{ activeItem?.grammar_point }</h3>
@@ -120,9 +173,20 @@ export function MainForm({
                                     { id: formItem.example_id, type: 'Sentence', title: formItem.japanese_sentence, content: formItem?.note_content, note_id: formItem?.note_id }
                                   )
                                 } />
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger>
+                                      <BotMessageSquare className={"w-4 h-4 cursor-pointer"} onClick={(e) => handleCozeClick(e, formItem)} />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>AI Suggestion</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
                             </div>
                         </div>
                         <Separator className="bg-gray-400" />
+
                       </>
                     )
                   } 
@@ -135,6 +199,42 @@ export function MainForm({
           </div>
         </div>
       </form>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <div className="flex items-center">
+              <DialogTitle>Analysis Result</DialogTitle>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleCopy}
+                className="h-8 w-8 p-0 ml-2"
+              >
+                {copied ? (
+                  <Check className="h-4 w-4 text-green-500" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm text-muted-foreground mb-4">
+              Sentence: {currentSentence}
+            </p>
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin" />
+              </div>
+            ) : (
+              <div 
+                className="text-sm whitespace-pre-wrap"
+                dangerouslySetInnerHTML={{ __html: cozeResult }}
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

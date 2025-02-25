@@ -73,7 +73,7 @@ export interface NoteParams {
  */
 // * 获取语法列表接口
 export const getGrammarApi = (params: { level_id: string, limit: number, user_id: number, proficiency: string }) => {
-	return http.get<(Grammar & Note & Proficiency)[]>(`/grammar`, params);
+	return http.get<(Grammar & Note & Proficiency)[]>(`/grammar/cached`, params);
 }
 
 // * 获取例句列表接口

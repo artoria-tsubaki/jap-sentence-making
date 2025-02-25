@@ -18,11 +18,11 @@ export class ExampleService {
       l.level_name,
       n.id as note_id, n.content as note_content,
       g.grammar_point, g.explanation, g.href, g.meaning, g.connection, g.initial
-      FROM example e
-      LEFT JOIN sentence s ON e.id = s.example_id
-      LEFT JOIN note n ON e.id = n.example_id
-      LEFT JOIN grammar g ON e.grammar_id = g.id
-      LEFT JOIN level l ON g.level_id = l.id
+      FROM Example e
+      LEFT JOIN Sentence s ON e.id = s.example_id
+      LEFT JOIN Note n ON e.id = n.example_id
+      LEFT JOIN Grammar g ON e.grammar_id = g.id
+      LEFT JOIN Level l ON g.level_id = l.id
     `
 
     const params: SqlParams[] = [
