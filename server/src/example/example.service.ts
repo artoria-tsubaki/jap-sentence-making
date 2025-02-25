@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../prismaService/prisma.service';
 import { Example, Sentence } from '@prisma/client';
 import { FindExamplesDto } from './dto/find-examples.dto';
 import { concatSqlWhereParams } from '../utils'

@@ -26,7 +26,7 @@ class RequestHttp {
 	public constructor(config: AxiosRequestConfig) {
 		// 实例化axios
 		this.service = axios.create(config);
-		this.apiUrl = '/api'
+		this.apiUrl = import.meta.env.VITE_APP_API_URL as string;
 
 		/**
 		 * @description 请求拦截器

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProficiencyDto } from './dto/create-proficiency.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/prismaService/prisma.service';
 import { Result, ResultData } from 'src/interface';
 import { Prisma, Proficiency } from '@prisma/client';
 

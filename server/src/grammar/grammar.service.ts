@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../prismaService/prisma.service';
 import { Grammar, Proficiency } from '@prisma/client';
 import { GrammarDto } from './dto/grammar.dto';
 import { ResultData } from 'src/interface';

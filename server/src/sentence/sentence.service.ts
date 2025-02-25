@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Result, Sentence } from 'src/interface';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/prismaService/prisma.service';
 
 @Injectable()
 export class SentenceService {
